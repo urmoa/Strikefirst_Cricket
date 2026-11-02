@@ -10,13 +10,30 @@ import { CRICKET_AVAILABLE_TARGETS, CRICKET_TARGETS, normalizeCricketTargets,
 import { CricketGameView } from "./cricket-game";
 
 export function CricketSetup() {
-  const [players, setPlayers] = useState<{ id: number; name: string; marksToClose: number }[]>([]);
+  const [players, setPlayers] = useState<{ id: number; name: string; marksToClose: number; playerId?: number }[]>([]);
   const names = players.map(player => player.name);
   const nextPlayerId = useRef(1);
   const pendingFocus = useRef<"guest" | "start" | number | null>(null);
   const form = useRef<HTMLFormElement>(null);
   const startButton = useRef<HTMLButtonElement>(null);
   const [guestName, setGuestName] = useState("");
+  const [search, setSearch] = useState<{ query: string; players: { id: number; displayName: string }[]; failed: boolean }>({ query: "", players: [], failed: false });
+  useEffect(() => {
+    const query = guestName.trim();
+    if (query.length < 2 || players.length >= 6) return;
+    const controller = new AbortController();
+    const timeout = setTimeout(async () => {
+      try {
+        const response = await fetch(`/api/players?q=${encodeURIComponent(query)}`, { signal: controller.signal });
+        if (!response.ok) throw new Error("search_unavailable");
+        const data = await response.json();
+        if (!controller.signal.aborted) setSearch({ query, players: data.players, failed: false });
+      } catch {
+        if (!controller.signal.aborted) setSearch({ query, players: [], failed: true });
+      }
+    }, 250);
+    return () => { clearTimeout(timeout); controller.abort(); };
+  }, [guestName, players.length]);
   const [bestOf, setBestOf] = useState<CricketLegFormat>(1);
   const [targets, setTargets] = useState<CricketTarget[]>(() => [...CRICKET_TARGETS]);
   const [alternative1v1View, setAlternative1v1View] = useState(true);
@@ -42,11 +59,12 @@ export function CricketSetup() {
     else form.current?.querySelector<HTMLInputElement>(`[data-player-id="${target}"] input`)?.focus();
   });
 
-  function addGuest() {
-    const name = guestName.trim();
+  function addGuest(profile?: { id: number; displayName: string }) {
+    const name = profile?.displayName ?? guestName.trim();
     if (!name || names.length >= 6) return;
+    if (profile && players.some(player => player.playerId === profile.id)) return;
     const id = nextPlayerId.current++;
-    setPlayers(previous => previous.length < 6 ? [...previous, { id, name, marksToClose: 3 }] : previous);
+    setPlayers(previous => previous.length < 6 ? [...previous, { id, name, marksToClose: 3, playerId: profile?.id }] : previous);
     pendingFocus.current = names.length === 5 ? "start" : "guest";
     setGuestName("");
   }
@@ -161,20 +179,27 @@ export function CricketSetup() {
               </li>
             ))}
           </ol>
-          <div className="cricket-guest-entry">
+          {names.length < 6 && <div className="cricket-guest-entry">
             <input ref={guestInput} className="cricket-guest-input" value={guestName} maxLength={60}
               aria-label={t("cricket.playerSearch")} placeholder={t("cricket.playerSearch")} autoComplete="off"
-              disabled={names.length >= 6} onChange={event => setGuestName(event.target.value)}
+              onChange={event => setGuestName(event.target.value)}
               onKeyDown={event => {
                 if (event.key === "Enter" && !event.nativeEvent.isComposing) {
                   event.preventDefault();
                   if (!event.repeat) addGuest();
                 }
               }} />
-            {guestName.trim() && names.length < 6 && <button className="cricket-guest-option" type="button" onClick={addGuest}>
+            {search.query === guestName.trim() && guestName.trim().length >= 2 && <>
+              {search.players.filter(profile => !players.some(player => player.playerId === profile.id)).map(profile =>
+                <button key={profile.id} className="cricket-guest-option" type="button" onClick={() => addGuest(profile)}>
+                  {t("cricket.addFoundPlayer", { name: profile.displayName })}
+                </button>)}
+              {search.failed && <p role="status">{t("cricket.searchUnavailable")}</p>}
+            </>}
+            {guestName.trim() && <button className="cricket-guest-option" type="button" onClick={() => addGuest()}>
               {t("cricket.addGuest", { name: guestName.trim() })}
             </button>}
-          </div>
+          </div>}
           <button className="cricket-button cricket-reorder-players" type="button" disabled={names.length < 2}
             title={t("cricket.orderHelp")}
             onClick={() => setPlayers(previous => previous.length < 2 ? previous : [...previous.slice(1), previous[0]])}>
@@ -206,9 +231,8 @@ export function CricketSetup() {
                 {t(mode === "standard" ? "cricket.standard" : "cricket.cutthroat")}
               </label>)}
             </fieldset>
-            <fieldset className="cricket-target-picker" aria-describedby="cricket-target-help">
+            <fieldset className="cricket-target-picker">
               <legend>{t("cricket.targetsLabel")}</legend>
-              <p id="cricket-target-help">{t("cricket.targetsHelp")}</p>
               <button type="button" className="cricket-button" onClick={() => {
                 const shuffled = [...CRICKET_AVAILABLE_TARGETS];
                 for (let index = shuffled.length - 1; index > 0; index--) {

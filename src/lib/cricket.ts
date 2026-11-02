@@ -53,6 +53,13 @@ export function isCricketTargetClosed(player: CricketPlayer, target: CricketTarg
   return player.marks[target] >= player.marksToClose;
 }
 
+export function canRecordCricketMark(state: CricketState, target: CricketTarget): boolean {
+  return !state.winnerId && state.turnMode !== "darts" && state.targets.includes(target) &&
+    state.turnMarks.length < 9 &&
+    (state.turnMarks.includes(target) || new Set(state.turnMarks).size < 3) &&
+    !state.players.every(player => isCricketTargetClosed(player, target));
+}
+
 export function createCricketGame(players: readonly CricketPlayerSetup[], startingPlayer = 0, variant: CricketVariant = "standard",
   targets: readonly CricketTarget[] = CRICKET_TARGETS): CricketGame {
   const game: CricketGame = {
@@ -118,8 +125,7 @@ function applyEvent(state: CricketState, game: CricketGame, event: CricketEvent)
   const player = state.players[state.activePlayer];
   const mode = event.type === "mark" ? "marks" : "darts";
   if (state.turnMode && state.turnMode !== mode) throw new Error(t("cricket.error.inputMode"));
-  if (event.type === "mark" && (state.turnMarks.length >= 9 ||
-    state.players.every(player => isCricketTargetClosed(player, event.target)))) throw new Error(t("cricket.error.mark"));
+  if (event.type === "mark" && !canRecordCricketMark(state, event.target)) throw new Error(t("cricket.error.mark"));
   state.turnMode = mode;
   if (event.type === "hit" || event.type === "mark") {
     const multiplier = event.type === "mark" ? 1 : event.multiplier;

@@ -45,7 +45,6 @@ function Player({ index, state }: { index: number; state: CricketState }) {
   const highlighted = state.winnerId === player.id || state.winnerId === null && state.activePlayer === index;
   return <div className={highlighted ? "cricket-active" : undefined}>
     <span className="cricket-player-name" title={player.name}>{player.name}</span>
-    <span className="cricket-handicap-summary">{t("cricket.marksToCloseSummary", { count: player.marksToClose })}</span>
     <span className="cricket-player-status">{status}</span>
     <strong className="cricket-points">{player.points}</strong><span> {t("common.points")}</span>
   </div>;

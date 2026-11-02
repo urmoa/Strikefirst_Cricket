@@ -12,7 +12,6 @@ export function CricketMultiplayerScoreboard({ state, wins, showLegs }: {
         <div className={`cricket-multi-player-heading${showLegs ? "" : " cricket-multi-player-heading-single-leg"}`}>
           <div className="cricket-multi-name">
             <h4 title={player.name}>{player.name}</h4>
-            <span className="cricket-handicap-summary">{t("cricket.marksToCloseSummary", { count: player.marksToClose })}</span>
             {state.winnerId === player.id && <span className="cricket-player-status">{t("cricket.winner")}</span>}
           </div>
           {showLegs && <div className="cricket-multi-legs">

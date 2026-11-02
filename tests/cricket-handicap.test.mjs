@@ -88,7 +88,12 @@ test("handicap does not alter three darts, nine compact marks or mode locking", 
 test("personal closure wins in either variant and limits survive legs, undo, redo and rematch", () => {
   for (const variant of ["standard", "cutthroat"]) {
     let match = createCricketMatch(setup(1, 4), 0, 3, variant);
-    for (const target of CRICKET_TARGETS) match = recordCricketMatchEvent(match, mark(target));
+    for (const [index, target] of CRICKET_TARGETS.entries()) {
+      if (index > 0 && index % 3 === 0) {
+        match = recordCricketMatchEvent(recordCricketMatchEvent(match, end), end);
+      }
+      match = recordCricketMatchEvent(match, mark(target));
+    }
     const won = getCricketMatchState(match);
     assert.equal(won.state.winnerId, "player-1");
     assert.throws(() => recordCricketMatchEvent(match, end), /lõppenud/);

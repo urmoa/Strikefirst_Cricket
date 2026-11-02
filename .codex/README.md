@@ -8,7 +8,7 @@ Kasutaja edastatud projekti andmebaasiskeem on täies mahus failis [schema.prism
 - Kasutajaliides: React 19.
 - ORM: Prisma, klient `prisma-client-js`.
 - Andmebaas: PostgreSQL.
-- Ühendus loetakse keskkonnamuutujast `DATABASE_URL`. Ühenduse väärtust ei ole edastatud.
+- Ühendus loetakse keskkonnamuutujast `DATABASE_URL`. Kohalik rakenduse ühendus on Git-ist välistatud `.env` failis; administraatori ühendus on eraldi `.env.migrations` failis.
 - Rollid: `ADMIN`, `MEMBER`.
 - Sündmuse olekud: `UPCOMING`, `COMPLETED`, `CANCELLED`.
 
@@ -16,7 +16,7 @@ Kasutaja edastatud projekti andmebaasiskeem on täies mahus failis [schema.prism
 
 - Serveri ja rakenduse majutus: [Vercel](https://vercel.com/), kasutusele on plaanitud tasuta pakett.
 - PostgreSQL-andmebaasi majutus: [Neon](https://neon.com/), kasutusele on plaanitud tasuta pakett.
-- Majutust ja andmebaasiühendust ei ole veel seadistatud.
+- Pilvemajutust pole veel seadistatud. Kohalik PostgreSQL 18 andmebaas `strikefirst` ja piiratud rakenduse roll `strikefirst_app` on loodud. Seadistus on [kohaliku andmebaasi juhendis](../docs/local-database.md).
 
 ## CSS ja kujundus
 
@@ -73,6 +73,6 @@ Kui algne lähtekood on olemas, eelista sealt globaalset CSS-i, Tailwindi teema 
 - Mitmel sisumudelil on eesti- ja ingliskeelsed väljad (`Et`, `En`); osa mudeleid sisaldab ka üldist nime, kirjeldust või sisu.
 - Liigal ja hooajal on valikuline `rankingEventLimit`; selle rakendamise äriloogikat ei ole edastatud.
 - Skeem kirjeldab struktuuri, mitte olemasolevaid andmekirjeid, töötavat andmebaasiühendust ega täielikke ärireegleid.
-- Siinne skeem on projekti kontekst. Rakenduse tegelikku Prisma konfiguratsiooni ja migratsioone ei ole veel loodud.
+- Siinne skeem jääb algseks projekti kontekstiks. Rakenduse tööskeem on [prisma/schema.prisma](../prisma/schema.prisma); migratsioonid on [prisma/migrations](../prisma/migrations) kaustas.
 
 Allikas: kasutaja manus „Pasted text #1”, salvestatud 2026-10-31.

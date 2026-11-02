@@ -1,12 +1,50 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { CRICKET_TARGETS, createCricketMatch, getCricketMatchState, recordCricketMatchEvent,
+import { CRICKET_TARGETS, canRecordCricketMark, createCricketMatch, getCricketMatchState, recordCricketMatchEvent,
   undoCricketMatchInput, nextCricketLeg } from "../src/lib/cricket.ts";
 
 const mark = target => ({ type: "mark", target });
 const pass = { type: "end-turn", mode: "marks" };
 const state = match => getCricketMatchState(match).state;
 const record = (match, ...events) => events.reduce(recordCricketMatchEvent, match);
+
+test("compact input limits a visit to three distinct targets while allowing nine marks", () => {
+  for (const names of [["A", "B"], ["A", "B", "C"]]) {
+    for (const variant of ["standard", "cutthroat"]) {
+      let match = createCricketMatch(names, 0, 1, variant);
+      match = record(match, mark(20), mark(19), mark(25));
+      assert.equal(canRecordCricketMark(state(match), 18), false);
+      const snapshot = structuredClone(match);
+      assert.throws(() => record(match, mark(18)));
+      const invalidReplay = structuredClone(match);
+      invalidReplay.legs[0].events.push(mark(18));
+      assert.throws(() => state(invalidReplay));
+      assert.deepEqual(match, snapshot);
+      for (const target of [20, 19, 25, 20, 19, 25]) {
+        assert.equal(canRecordCricketMark(state(match), target), true);
+        match = record(match, mark(target));
+      }
+      assert.equal(state(match).turnMarks.length, 9);
+      for (const target of CRICKET_TARGETS) {
+        assert.equal(canRecordCricketMark(state(match), target), false);
+        assert.throws(() => record(match, mark(target)));
+      }
+      assert.deepEqual(state(JSON.parse(JSON.stringify(match))), state(match));
+      match = record(match, pass);
+      assert.equal(canRecordCricketMark(state(match), 18), true);
+      assert.deepEqual(state(record(match, mark(18))).turnMarks, [18]);
+    }
+  }
+});
+
+test("undo frees a target slot only after its last mark is removed", () => {
+  let match = record(createCricketMatch(["A", "B"]), mark(20), mark(19), mark(25), mark(25));
+  match = undoCricketMatchInput(match);
+  assert.equal(canRecordCricketMark(state(match), 18), false);
+  match = undoCricketMatchInput(match);
+  assert.equal(canRecordCricketMark(state(match), 18), true);
+  assert.deepEqual(state(record(match, mark(18))).turnMarks, [20, 19, 18]);
+});
 
 test("nine marks stay in one visit, the tenth is rejected without changing history", () => {
   let match = createCricketMatch(["A", "B"]);
@@ -75,7 +113,7 @@ for (const count of [3, 6]) {
     for (const marks of [0, 1, 9]) {
       const initial = createCricketMatch(names, count - 1);
       let match = initial;
-      for (let index = 0; index < marks; index++) match = record(match, mark(CRICKET_TARGETS[index % 7]));
+      for (let index = 0; index < marks; index++) match = record(match, mark(CRICKET_TARGETS[index % 3]));
       assert.equal(state(match).activePlayer, count - 1);
       assert.equal(state(match).turnMarks.length, marks);
       if (marks === 9) {

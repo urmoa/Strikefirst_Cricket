@@ -7,8 +7,26 @@
     "build": "next build",
     "start": "next start --hostname 127.0.0.1",
     "typecheck": "tsc --noEmit",
-    "test": "node --test tests/*.test.mjs"
+    "test": "node --test tests/*.test.mjs",
+    "postinstall": "prisma generate",
+    "db:generate": "prisma generate",
+    "db:migrate": "node scripts/migrate-db.cjs",
+    "db:check": "node scripts/check-db.cjs",
+    "db:verify": "node scripts/verify-db.cjs"
   },
-  "dependencies": { "next": "^15.5.0", "react": "^19.0.0", "react-dom": "^19.0.0" },
-  "devDependencies": { "typescript": "^5.9.0", "@types/node": "^22.0.0", "@types/react": "^19.0.0", "@types/react-dom": "^19.0.0" }
+  "dependencies": {
+    "@prisma/client": "^6.19.3",
+    "dotenv": "^18.0.9",
+    "next": "^15.5.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "server-only": "^0.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "prisma": "^6.19.3",
+    "typescript": "^5.9.0"
+  }
 }

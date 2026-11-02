@@ -35,9 +35,9 @@
     ".next-cricket/types/**/*.ts",
     ".next-dev/types/**/*.ts",
     ".next-keyboard/types/**/*.ts",
+    ".next-navigation-check/types/**/*.ts",
     ".next/types/**/*.ts",
-    "next-env.d.ts",
-    ".next-navigation-check/types/**/*.ts"
+    "next-env.d.ts"
   ],
   "exclude": [
     "node_modules"

@@ -106,9 +106,9 @@ Cricketi kujunduse eeskuju on [Strike Firsti Dart Tennis](https://www.strikefirs
 
 Cricketi kolmanda sammu kontroll: 18 automaattesti (sh algsed 14), tüübikontroll ja tootmisehitus läbisid. Brauseris kontrolliti punktiarvestust, käiguvahetust ja kokkuvõtet, tagasivõtmist, võitu kõigi kolme noolekohaga, kordusmängu, mõlema kinnituse nõustumist ja tühistamist, klaviatuuri ning 375 px ja töölauavaadet. Pikad võrdsed nimed ei põhjusta horisontaalset kerimist ning mängunupud on vähemalt 44 × 44 px.
 
-## Hilisem andmebaas
+## Kohalik andmebaas
 
-Algne [andmebaasi kontekst](./.codex/README.md) ja [Prisma skeem](./.codex/schema.prisma) on säilitatud. Andmebaasiga seotud arenduses tuleb neist lähtuda. Praegune mängude osa ei vaja `DATABASE_URL` väärtust, Prisma klienti ega migratsioone.
+Kohalik PostgreSQL-i andmebaas on `strikefirst`. Rakendus kasutab piiratud rolli `strikefirst_app`; administraatori ühendust kasutatakse ainult migratsioonideks. Seadistus ja käsud on [kohaliku andmebaasi juhendis](./docs/local-database.md). Algne [andmebaasi kontekst](./.codex/README.md) ja [Prisma skeem](./.codex/schema.prisma) on säilitatud. Cricketi mänguseis on endiselt lehe mälus; andmebaasiühendust kontrollib `/api/health`.
 
 ## Cricketi tahvelvaade ja stiilid
 
