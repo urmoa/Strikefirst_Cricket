@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+
+# Next.js builds, local build variants and backups
+/.next/
+/.next-*/
+/out/
+/build/
+next-env.d.ts
+*.tsbuildinfo
+
+# Local environment and logs
+.env*
+!.env.example
+*.log
+
+# Test coverage and local hosting metadata
+/coverage/
+/.vercel/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+Desktop.ini

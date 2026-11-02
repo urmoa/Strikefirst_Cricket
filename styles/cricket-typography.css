@@ -1,0 +1,26 @@
+/* Central Cricket font scale. Only overflowing games use the smaller scale. */
+.cricket-shell {
+  --cricket-font-adjust: 0px;
+}
+.cricket-shell, .cricket-game {
+  --cricket-font-12: calc(12px + var(--cricket-font-adjust));
+  --cricket-font-13: calc(13px + var(--cricket-font-adjust));
+  --cricket-font-14: calc(14px + var(--cricket-font-adjust));
+  --cricket-font-16: calc(16px + var(--cricket-font-adjust));
+  --cricket-font-18: calc(18px + var(--cricket-font-adjust));
+  --cricket-font-20: calc(20px + var(--cricket-font-adjust));
+  --cricket-font-22: calc(22px + var(--cricket-font-adjust));
+  --cricket-font-24: calc(24px + var(--cricket-font-adjust));
+  --cricket-font-28: calc(28px + var(--cricket-font-adjust));
+  --cricket-font-36: calc(36px + var(--cricket-font-adjust));
+  --cricket-font-leg-option: calc(clamp(12px, 2vw, 18px) + var(--cricket-font-adjust));
+  --cricket-font-page-title: calc(clamp(32px, 5vw, 48px) + var(--cricket-font-adjust));
+  --cricket-font-guest-option: calc(clamp(14px, 3.8vw, 20px) + var(--cricket-font-adjust));
+  --cricket-font-scoring-option: calc(clamp(12px, 2vw, 14px) + var(--cricket-font-adjust));
+}
+.cricket-game[data-compact-text] {
+  --cricket-font-adjust: -2px;
+}
+.cricket-game {
+  font-size: var(--cricket-font-16);
+}

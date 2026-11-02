@@ -1,0 +1,117 @@
+CRICKET – NOOLEMÄNGU REEGLITE KOKKUVÕTE
+
+Koostatud veebiallikate põhjal 01.11.2026.
+Allpool on standardse punktidega Cricketi reeglid. Levinud erivariandid
+on kirjeldatud eraldi; konkreetse liiga või mänguautomaadi reeglid võivad erineda.
+
+1. MÄNGU EESMÄRK JA OSAVÕTJAD
+
+Cricketit mängitakse tavaliselt kahe mängija või kahe võistkonna vahel.
+Võimalik on mängida ka rohkemate osalejatega.
+
+Arvesse lähevad ainult numbrid 20, 19, 18, 17, 16 ja 15 ning bull ehk
+märklaua keskosa. Teiste numbrite tabamine ei anna märke ega punkte.
+
+Võidab mängija, kes on sulgenud kõik seitse sihtmärki ja kelle punktisumma
+on vähemalt sama suur kui igal vastasel. Ainult sihtmärkide sulgemisest
+ei piisa, kui mängija on punktidega taga.
+
+2. MÄNGU KÄIK
+
+- Alustaja võib selgitada ühe noole viskega: keskpunktile lähemale visanu
+  alustab. Viigi korral korratakse viset.
+- Mängijad viskavad kordamööda, ühes viskevoorus kuni kolm noolt.
+- Numbrite tabamise järjekord on vaba. Sama vooru jooksul võib tabada
+  mitut sihtmärki või visata kõik nooled samasse sihtmärki.
+- Märgid ja punktid kogunevad voorude jooksul; neid ei nullita vooru lõpus.
+- Möödavise või märklaualt välja põrganud nool tulemust ei anna.
+
+3. MÄRGID JA SIHTMÄRGI SULGEMINE
+
+Iga sihtmärgi sulgemiseks on vaja kokku kolme märki:
+
+Tabamus                         Märke        Punktiväärtus lisamärgi kohta
+Ühekordne ala numbril 15–20      1            Vastava numbri väärtus
+Kahekordne ala ehk double       2            Vastava numbri väärtus
+Kolmekordne ala ehk triple      3            Vastava numbri väärtus
+Välimine bull                   1            25
+Sisemine bull ehk double bull   2            25 (kogu tabamus on 50)
+
+Näiteks 20 saab sulgeda kolme üksiku tabamusega, ühe double'i ja ühe
+üksiku tabamusega või ühe triple'iga. Need võivad tulla eri voorudes.
+Bulli sulgeb näiteks üks välimise ja üks sisemise bulli tabamus.
+
+Terminoloogia võib allikati erineda. Siin tähendab „enda jaoks suletud”,
+et mängijal on sihtmärgil vähemalt kolm märki. See annab võimaluse seal
+punkte koguda, kuni vähemalt ühel vastasel on sama sihtmärk veel sulgemata.
+Kui kõik mängijad on sihtmärgi sulgenud, on see mängust väljas.
+
+4. PUNKTIDE ARVESTAMINE
+
+Esimesed kolm märki sihtmärgil kuluvad selle sulgemiseks ega anna punkte.
+Üle kolme minevad märgid annavad punkte ainult siis, kui vähemalt üks
+vastane pole sama sihtmärki veel sulgenud. Standardvariandis lisatakse
+punktid viskajale; rohkemate vastaste olemasolu punktisummat ei korruta.
+
+Punkte võib saada juba selle viskega, millega sihtmärk suletakse:
+
+- Sul on 20 peal kaks märki ja viskad triple 20. Üks märk sulgeb 20,
+  kaks ülejäänut annavad 40 punkti, kui vastasel on 20 veel sulgemata.
+- Sul on 20 juba suletud ja vastasel veel mitte. Triple 20 annab 60 punkti.
+- Kui mõlemal on 20 suletud, ei anna järgmine triple 20 midagi.
+- Sul on bullil kaks märki ja viskad sisemise bulli. Üks märk sulgeb bulli
+  ning teine annab 25 punkti, kui vastasel on bull veel sulgemata.
+
+5. MÄNGU LÕPP
+
+Võit kontrollitakse pärast iga noolt: kui kõik sihtmärgid on enda jaoks
+suletud ja punktisumma on vastaste omaga võrdne või suurem, on mäng läbi.
+Ülejäänud nooli ei pea viskama ning vastasel ei ole tasandusvooru.
+
+Näide: A-l on kõik sihtmärgid suletud ja 100 punkti, B-l 120 punkti ning
+19 veel sulgemata. A ei ole veel võitnud. A võib visata 19 peale punkte;
+double 19 annab 38 punkti ja viib A 138 punktiga võidule.
+Kui A jõuaks täpselt 120 punktini, piisaks ka sellest.
+
+Cricketis ei ole x01 mängu nulli jõudmise, lõhkimineku (bust) ega
+double-out-lõpetamise nõuet.
+
+6. TULEMUSTABEL
+
+Tabelisse märgitakse seitse sihtmärki, mõlema mängija märgid ja punktisumma.
+Levinud tähistus on üks märk „/”, kaks märki „X” ning kolm märki ringiga X.
+Digitaalses tabelis sobib sama hästi näidata sulgemise seisu arvudega 0–3.
+Üle kolme minevad märgid kajastuvad punktides, kui punktide saamine on lubatud.
+
+7. LEVINUD VARIANDID JA KOKKULEPPED
+
+- No-score Cricket: punkte ei koguta. Võidab esimene, kes sulgeb kõik
+  numbrid 15–20 ja bulli.
+- Cut-throat Cricket: lisapunktid lähevad neile vastastele, kellel vastav
+  sihtmärk on sulgemata. Võiduks peab mängija sulgema kõik sihtmärgid ning
+  tema punktisumma peab olema vastaste omast väiksem või nendega võrdne.
+- Järjekorraga variandid: sihtmärke tuleb sulgeda etteantud järjekorras.
+  Standardse Cricketi puhul sellist nõuet ei ole.
+- Elektroonilisel mängul võib olla voorupiirang või muu erireegel.
+  Piirangu täitumise võitja ja viigi lahendamine tuleb võtta konkreetse
+  seadme või võistluse reeglitest, mitte eeldada üldreeglina.
+
+8. LIHTNE TAKTIKA
+
+Kõrged numbrid võimaldavad kiiremini punkte teenida. Vastase suletud
+sihtmärgi sulgemine peatab tema punktikogumise sellel numbril.
+Valik punktide kogumise ja järgmise sihtmärgi sulgemise vahel sõltub
+punktivahest ning vastase sulgemata numbritest.
+
+ALLIKAD
+
+1. Wikipedia: „Cricket (darts)” – mängukäik, märgid, punktiarvestus,
+   võidutingimus ja variandid.
+   https://en.wikipedia.org/wiki/Cricket_(darts)
+
+2. DartsRow / Crows Darts: „Darts Cricket: Rules of the Game and
+   Strategies for Winning” – jaotised „American Cricket” ja „Cricket”.
+   https://www.crowsdarts.com/games/cricket.html
+
+Allikaid vaadatud 01.11.2026. Kokkuvõte on kirjutatud eesti keeles
+oma sõnastuses; näited selgitavad kirjeldatud reegleid.

@@ -1,0 +1,383 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  MEMBER
+}
+
+enum EventStatus {
+  UPCOMING
+  COMPLETED
+  CANCELLED
+}
+
+model League {
+  id                Int       @id @default(autoincrement())
+  name              String
+  nameEt            String    @default("")
+  nameEn            String    @default("")
+  slug              String    @unique
+  description       String
+  descriptionEt     String    @default("")
+  descriptionEn     String    @default("")
+  rankingEventLimit Int?
+  seasons           Season[]
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+}
+
+model Season {
+  id                Int       @id @default(autoincrement())
+  leagueId          Int
+  league            League    @relation(fields: [leagueId], references: [id], onDelete: Cascade)
+  name              String
+  nameEt            String    @default("")
+  nameEn            String    @default("")
+  slug              String
+  startsAt          DateTime
+  endsAt            DateTime?
+  rankingEventLimit Int?
+  isActive          Boolean   @default(false)
+  events            Event[]
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@unique([leagueId, slug])
+  @@index([isActive, startsAt])
+  @@index([leagueId, startsAt])
+}
+
+model User {
+  id             Int                 @id @default(autoincrement())
+  email          String              @unique
+  passwordHash   String
+  role           Role
+  playerId       Int?                @unique
+  player         Player?             @relation(fields: [playerId], references: [id], onDelete: SetNull)
+  clubJoinedAt   DateTime?
+  birthday       DateTime?
+  membershipFeePaidUntil DateTime?
+  countAsMember Boolean             @default(true)
+  mustChangePassword Boolean        @default(false)
+  membershipPeriods MembershipPeriod[]
+  registrations  EventRegistration[]
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+
+  @@index([role, email])
+  @@index([membershipFeePaidUntil])
+}
+
+model MembershipApplication {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  birthDate DateTime
+  message   String
+  status    String   @default("NEW")
+  hidden    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status, createdAt])
+}
+
+model MembershipPeriod {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  startsAt  DateTime
+  endsAt    DateTime
+  paidAt    DateTime?
+  note      String   @default("")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([endsAt])
+}
+
+model Player {
+  id              Int       @id @default(autoincrement())
+  displayName     String
+  slug            String    @unique
+  bio             String?
+  city            String?
+  joinedAt        DateTime
+  avatarUrl       String?
+  user            User?
+  matchesAsA      Match[]   @relation("PlayerAMatches")
+  matchesAsB      Match[]   @relation("PlayerBMatches")
+  wins            Match[]   @relation("WinnerMatches")
+  eventResults    EventResult[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([displayName])
+  @@index([joinedAt])
+}
+
+model NewsPost {
+  id          Int      @id @default(autoincrement())
+  title       String
+  titleEt     String   @default("")
+  titleEn     String   @default("")
+  slug        String   @unique
+  excerpt     String
+  excerptEt   String   @default("")
+  excerptEn   String   @default("")
+  content     String
+  contentEt   String   @default("")
+  contentEn   String   @default("")
+  imageUrl    String?
+  publishedAt DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([publishedAt])
+}
+
+model NavigationItem {
+  id        Int      @id @default(autoincrement())
+  key       String   @unique
+  href      String
+  labelEt   String
+  labelEn   String
+  visible   Boolean  @default(true)
+  requiresAuth Boolean @default(false)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([visible, sortOrder])
+  @@index([requiresAuth, visible])
+}
+
+model SocialLink {
+  id        Int      @id @default(autoincrement())
+  name      String
+  url       String
+  iconKey   String   @default("link")
+  visible   Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([visible, sortOrder])
+}
+
+model Sponsor {
+  id        Int      @id @default(autoincrement())
+  name      String
+  imageUrl  String
+  websiteUrl String?
+  description String @default("")
+  startsAt DateTime?
+  endsAt DateTime?
+  visible   Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([visible, sortOrder])
+  @@index([startsAt, endsAt])
+}
+
+model StaticText {
+  id        Int      @id @default(autoincrement())
+  key       String   @unique
+  label     String
+  valueEt   String
+  valueEn   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([label])
+}
+
+model GameCategory {
+  id        Int      @id @default(autoincrement())
+  nameEt    String
+  nameEn    String
+  sortOrder Int      @default(0)
+  games     Game[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([sortOrder, nameEt])
+}
+
+model Game {
+  id            Int           @id @default(autoincrement())
+  categoryId    Int?
+  category      GameCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  name          String
+  nameEt        String        @default("")
+  nameEn        String        @default("")
+  slug          String        @unique
+  description   String
+  descriptionEt String        @default("")
+  descriptionEn String        @default("")
+  tutorial      String        @default("")
+  tutorialEt    String        @default("")
+  tutorialEn    String        @default("")
+  visible       Boolean       @default(true)
+  sortOrder     Int           @default(0)
+  events        Event[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([visible, sortOrder])
+  @@index([categoryId, sortOrder])
+}
+
+model Event {
+  id             Int                 @id @default(autoincrement())
+  seasonId       Int?
+  season         Season?             @relation(fields: [seasonId], references: [id], onDelete: SetNull)
+  gameId         Int?
+  game           Game?               @relation(fields: [gameId], references: [id], onDelete: SetNull)
+  title          String
+  description    String
+  location       String
+  gameType       String              @default("501 Singles")
+  isPublic       Boolean             @default(true)
+  registrationUrl String?
+  allowInternalRegistration Boolean  @default(false)
+  startsAt       DateTime
+  endsAt         DateTime?
+  status         EventStatus
+  matches        Match[]
+  results        EventResult[]
+  registrations  EventRegistration[]
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+
+  @@index([status, startsAt])
+  @@index([isPublic, status, startsAt])
+  @@index([seasonId, startsAt])
+  @@index([gameId, startsAt])
+}
+
+model MemberDiscount {
+  id          Int      @id @default(autoincrement())
+  title       String
+  bonusCode   String?
+  link        String?
+  description String
+  imageUrl    String?
+  active      Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([active, sortOrder])
+}
+
+model MemberResource {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  url         String?
+  content     String   @default("")
+  active      Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([active, sortOrder])
+}
+
+model MemberMessage {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String
+  active    Boolean  @default(true)
+  startsAt  DateTime?
+  endsAt    DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([active, startsAt, endsAt])
+}
+
+model EventResult {
+  id              Int      @id @default(autoincrement())
+  eventId         Int
+  event           Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  playerId        Int
+  player          Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  position        Int
+  points          Int
+  oneEighties     Int      @default(0)
+  highestCheckout Int?
+  average         Float?
+  notes           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([eventId, playerId])
+  @@index([eventId, position])
+  @@index([playerId])
+}
+
+model Match {
+  id               Int      @id @default(autoincrement())
+  eventId          Int?
+  event            Event?   @relation(fields: [eventId], references: [id], onDelete: SetNull)
+  playerAId        Int
+  playerA          Player   @relation("PlayerAMatches", fields: [playerAId], references: [id], onDelete: Cascade)
+  playerBId        Int
+  playerB          Player   @relation("PlayerBMatches", fields: [playerBId], references: [id], onDelete: Cascade)
+  playerAScore     Int
+  playerBScore     Int
+  winnerId         Int
+  winner           Player   @relation("WinnerMatches", fields: [winnerId], references: [id], onDelete: Cascade)
+  highestCheckout  Int?
+  playerA180s      Int      @default(0)
+  playerB180s      Int      @default(0)
+  playedAt         DateTime
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([eventId])
+  @@index([playedAt])
+  @@index([winnerId])
+}
+
+model EventRegistration {
+  id        Int      @id @default(autoincrement())
+  eventId   Int
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([eventId, userId])
+  @@index([userId])
+}
+
+model DartGolfCourse {
+  id          Int      @id @default(autoincrement())
+  name        String
+  slug        String   @unique
+  description String   @default("")
+  // Average three-dart score the pars were calculated from (30 easy, 40 medium, 50 hard).
+  difficulty  Int      @default(40)
+  // [{ "target": number, "par": number }, ...]
+  holes       Json
+  visible     Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([visible, sortOrder])
+}
+ 

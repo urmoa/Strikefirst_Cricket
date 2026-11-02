@@ -1,0 +1,83 @@
+501 NOOLEMÄNGU REEGLITE KOKKUVÕTE
+Koostatud veebiallikate põhjal 31.10.2026.
+
+1. Mängu eesmärk ja käigud
+Iga mängija alustab 501 punktiga. Mängijad viskavad kordamööda ning ühes
+käigus saab visata kuni kolm noolt. Tabamuste punktid lahutatakse mängija
+allesjäänud punktidest. Ühe 501-mängu ehk leg'i võidab mängija, kes jõuab
+esimesena täpselt nulli ja täidab lõpetamise tingimuse.
+
+Tavalises 501-s võib punktide kogumist alustada mis tahes punktialasse
+tabamisega (straight-in). Lõpetamiseks on vaja duublit (double-out).
+Alustaja määratakse enne mängu vastavalt kokkuleppele või võistlusjuhendile;
+levinud viis on visata keskpunktile ja võrrelda tabamuste lähedust.
+
+2. Märklaua punktiarvestus
+- Numbrisektori suur üksikala: sektori number, näiteks 20 annab 20 punkti.
+- Välimine kitsas rõngas ehk duubel (D): kahekordne väärtus, D20 = 40.
+- Sisemine kitsas rõngas ehk kolmik (T): kolmekordne väärtus, T20 = 60.
+- Keskpunkti välimine ring (outer bull): 25 punkti, ei ole duubel.
+- Sisemine keskpunkt (bullseye): 50 punkti, loetakse duubliks 25.
+- Punktialast mööda läinud nool annab 0 punkti.
+
+Ühe noole suurim tulemus on 60 (T20), kolme noole suurim tulemus 180
+(T20 + T20 + T20). Näiteks 100-punktilise käigu järel jääb 501-st alles 401.
+
+3. Lõpetamine ehk checkout
+Allesjäänud punktid tuleb viia täpselt nulli. Viimane nool peab tabama
+duublit või 50-punktilist sisemist keskpunkti. Kõiki kolme noolt ei pea
+kasutama: korrektse lõpetamise korral lõpeb leg kohe.
+
+Näited:
+- 40 alles: D20 = 40, leg võidetud.
+- 32 alles: D16 = 32, leg võidetud.
+- 50 alles: sisemine keskpunkt = 50, leg võidetud.
+- 60 alles: üksik 20 ja D20 = 60, leg võidetud.
+- 170 alles: T20 + T20 + sisemine keskpunkt = 170.
+
+Suurim kolme noolega lõpetatav jääk on 170. Kõik sellest väiksemad jäägid
+ei ole kolme noolega lõpetatavad: näiteks 169, 168, 166, 165, 163, 162 ja 159.
+
+4. Lõhkiminek ehk bust
+Käik lõpeb kohe lõhkiminekuga, kui mõne noole järel:
+- jääk muutuks negatiivseks ehk visatakse rohkem kui alles on;
+- alles jääks täpselt 1 punkt, sest seda ei saa duubliga lõpetada;
+- jääk jõuaks nulli, kuid viimane tabamus ei oleks duubel ega sisemine bull.
+
+Lõhkiminekul tühistatakse kogu selle käigu punktid, ka enne eksimust
+visatud tabamused. Jääk taastub käigu alguse väärtusele ning järg läheb
+järgmisele mängijale. Selle käigu ülejäänud nooli enam ei visata.
+
+Näited:
+- Käigu alguses 32: üksik 20 jätab 12, seejärel üksik 15 põhjustab bust'i.
+  Jääk taastub 32-le, mitte 12-le.
+- 20 alles ja tabatakse üksik 20: null ilma duublita, bust; jääb 20.
+- 20 alles ja tabatakse üksik 19: jääks 1, bust; jääb 20.
+- 40 alles ja tabatakse üksik 20: jääb 20 ning samas käigus saab jätkata,
+  kui nooli on veel kasutada. See tabamus üksi ei ole bust.
+
+5. Leg'id, set'id ja matši võit
+Leg on üks mäng algjäägist 501 kuni korrektse nullini. Uue leg'i alguses
+taastatakse mängijate jäägid 501-le. Matši võib mängida kindla arvu leg'ide
+võitudeni: näiteks best of 5 tähendab, et võidab esimesena 3 leg'i võitja.
+Set'idega formaadis koosneb sett leg'idest ning matš settidest.
+Vajalikud võitude arvud ja alustamise järjekord määratakse võistlusjuhendis.
+
+6. X01 ja reeglivariandid
+301, 501 ja 701 kuuluvad X01 mängude hulka: põhiloogika on sama, algjääk
+erineb. Enne mängu tuleb kokku leppida alustamise ja lõpetamise tingimused.
+Double-in nõuab punktiarvestuse alustamiseks duublit; straight-out lubab
+lõpetada mis tahes punktitabamusega. Need on variandid, mitte siin kirjeldatud
+tavalise straight-in / double-out 501 vaikereeglid. Eespool kirjeldatud
+1-punktilise jäägi ja duublita nulli bust-reeglid kehtivad double-out-mängus.
+
+ALLIKAD
+1. Dartist: How to Play 501 Darts — eesmärk, punktid, double-out, bust,
+   leg'id, set'id ja X01 variandid.
+   https://dartist-app.com/rules/501
+2. Dartsy: 501 Darts Rules: The Complete Guide — mängukäik, bust'i näide
+   ja lõpetamiskombinatsioonid.
+   https://dartsy.org/rules/501
+
+Tegu on eestikeelse praktilise kokkuvõttega. Võistlusel lähtutakse lisaks
+korraldaja kehtivast juhendist ja kohaldatavast ametlikust reeglistikust.
