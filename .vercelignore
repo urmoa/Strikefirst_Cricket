@@ -1,0 +1,16 @@
+.git
+.agents
+.codex
+.neon
+.env*
+.next*
+node_modules
+*.log
+*.tsbuildinfo
+docs
+tests
+scripts
+prisma/permissions.sql
+prisma/pg_hba.strikefirst.conf
+AGENTS.md
+skills-lock.json

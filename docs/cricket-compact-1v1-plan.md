@@ -37,8 +37,8 @@ Need on eelmises plaanis pakutud rakendusvalikud, mitte kasutaja eraldi sõnasta
 - [1v1 tabel](../src/app/play/cricket/cricket-scoreboard.tsx): keskmised sihtmärgid ja päis on praegu tavalised tabelilahtrid.
 - [Tavalised sisestusnupud](../src/app/play/cricket/cricket-controls.tsx).
 - [Seadistus, mängu olek ja Undo/Redo ajalugu](../src/app/play/cricket/cricket-setup.tsx): Undo kasutab praegu `undoCricketMatchTurn`, mitte üksiksündmuse Undo funktsiooni. Redo talletab matši olekute koopiad.
-- [Paigutus ja kujundus](../styles/cricket.css).
-- [Keskne tüpograafia](../styles/cricket-typography.css).
+- [Tabeli kujundus](../src/app/play/cricket/cricket-scoreboard.css) ja [sisestusnupud](../src/app/play/cricket/cricket-controls.css).
+- [Keskne tüpograafia](../src/app/play/cricket/cricket-typography.css).
 - [Ruumi järgi fondi vähendamine](../src/app/play/cricket/use-cricket-text-fit.ts).
 - Olemasolevad testid asuvad [tests kaustas](../tests/), sealhulgas `cricket-turn-undo.test.mjs` ja teised `cricket-*.test.mjs` failid.
 - Tavalise paigutuse praegune murdepunkt on 760/761 px. Ära muuda seda uue sisestusviisi lisamise käigus.
@@ -77,7 +77,7 @@ Kohanda eelmise käigu kokkuvõte käigu tüübile vastavaks, näiteks `Mängija
 
 ### 5. Hoia kujundus keskne
 
-Lisa uue sisestusviisi klassid ja paigutus `styles/cricket.css` faili. Kasuta fontide jaoks `styles/cricket-typography.css` muutujaid. Väldi inline-stiile ja korduvaid fondisuuruste erandeid komponentides. Säilita olemasolev teksti automaatne vähendamine ja kontrolli selle koosmõju uue tabeliga.
+Lisa uue sisestusviisi klassid ja paigutus [sisestuse](../src/app/play/cricket/cricket-controls.css) ning [tabeli](../src/app/play/cricket/cricket-scoreboard.css) stiilidesse. Kasuta fontide jaoks [keskse tüpograafia](../src/app/play/cricket/cricket-typography.css) muutujaid. Väldi inline-stiile ja korduvaid fondisuuruste erandeid komponentides. Säilita olemasolev teksti automaatne vähendamine ja kontrolli selle koosmõju uue tabeliga.
 
 ## Vastuvõtukriteeriumid ja kontrollid
 

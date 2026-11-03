@@ -7,7 +7,7 @@ export function CricketScoreboard({ state, wins, showLegs, inputMode, onMark, on
   state: CricketState; wins: readonly number[]; showLegs: boolean; inputMode: CricketInputMode;
   onMark: (target: CricketTarget) => void; onPass: () => void;
 }) {
-  const compact = inputMode === "marks";
+  const compact = inputMode === "marks" && !state.winnerId;
   return <table className="cricket-scoreboard" aria-label={t("cricket.scoreboardLabel")}>
     <thead>
     {showLegs && <tr className="cricket-legs-row">

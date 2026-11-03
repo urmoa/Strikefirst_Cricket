@@ -18,7 +18,7 @@ Muuda [mängu seadistust](../src/app/play/cricket/cricket-setup.tsx):
 - Kuva nime järel väike valik „Sulgemiseks” väärtustega 1–9, vaikimisi 3. Lisa selgitus „Tabamusmärke iga sihtmärgi sulgemiseks”.
 - Seo valik konkreetse mängija objektiga, et nime muutmine, üles/alla liigutamine ja algusmängija vahetamine säilitaksid tema väärtuse. Eemaldatud mängija uuesti lisamisel on vaikeväärtus taas 3.
 - Anna valikule mängijat eristav ligipääsetav nimi. Säilita nimevälja Enteriga navigeerimine ja olemasolev fookuse haldus ka siis, kui reas on uus sisestuselement.
-- Väikesel ekraanil peab valik ja rea toimingud mahtuma ilma horisontaalse kerimiseta; vajadusel paiguta toimingud teisele reale. Kujundus lisa [Cricketi stiilidesse](../styles/cricket.css).
+- Väikesel ekraanil peab valik ja rea toimingud mahtuma ilma horisontaalse kerimiseta; vajadusel paiguta toimingud teisele reale. Kujundus lisa [Cricketi seadistuse stiilidesse](../src/app/play/cricket/cricket-setup.css).
 - Mängu alustamisel kopeeri valitud väärtused mängu konfiguratsiooni. Mängu ajal on need selle mängu jaoks fikseeritud; muutmine toimub seadistusvaates enne uue mängu alustamist.
 
 ## 2. Mängumudel ja sulgemise loogika

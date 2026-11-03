@@ -1,3 +1,4 @@
+import "./home.css";
 import { t } from "@/lib/i18n";
 ﻿import Link from "next/link";
 

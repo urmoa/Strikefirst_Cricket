@@ -1,0 +1,117 @@
+/* Scoped to game selection so match screens keep their own layout. */
+.game-selection-page {
+  width: 100%;
+  max-width: none;
+}
+
+.game-selection-page .play-header {
+  min-height: 56px;
+  padding: 4px max(12px, calc((100% - 1200px) / 2));
+  background: #000;
+}
+
+.play-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: -.4px;
+}
+
+.play-club-logo {
+  width: 40px;
+  height: 40px;
+  padding: 3px;
+  border: 1px solid #ffffff1a;
+  border-radius: 6px;
+  object-fit: contain;
+}
+
+.play-menu {
+  position: relative;
+}
+
+.play-menu summary {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #ffffff26;
+  border-radius: 6px;
+  list-style: none;
+  cursor: pointer;
+}
+
+.play-menu summary::-webkit-details-marker {
+  display: none;
+}
+
+.play-menu summary:focus-visible {
+  outline: 2px solid #ba0c2f;
+  outline-offset: 5px;
+}
+
+.play-menu nav {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 10;
+  min-width: 180px;
+  padding: 8px;
+  border: 1px solid #ffffff26;
+  border-radius: 8px;
+  background: #080808;
+}
+
+.play-menu nav a {
+  display: block;
+  padding: 10px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.play-menu nav a:hover {
+  background: #ffffff0d;
+}
+
+.play-selection-main, .game-selection-page .play-footer {
+  width: min(1200px, calc(100% - 24px));
+  margin-inline: auto;
+}
+
+.play-intro {
+  padding: 32px 0;
+}
+
+.play-intro-eyebrow {
+  margin-bottom: 8px;
+  color: #ffffffb3;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.play-intro h1 {
+  margin: 0 0 8px;
+  font-size: 32px;
+  font-weight: 900;
+  line-height: 1.2;
+  letter-spacing: -.8px;
+}
+
+.play-intro-description {
+  color: #ffffff80;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.7;
+}
+
+.play-footer {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid #ffffff1a;
+  color: #ffffff66;
+  font-size: 11px;
+}

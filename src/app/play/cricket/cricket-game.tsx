@@ -1,7 +1,8 @@
 import { t } from "@/lib/i18n";
 import { isCricketTargetClosed } from "@/lib/cricket";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import type { CricketEvent, CricketGame, CricketState, CricketThrow, CricketLegFormat } from "@/lib/cricket";
+import type { CricketEvent, CricketGame, CricketMatch, CricketState, CricketThrow, CricketLegFormat } from "@/lib/cricket";
+import { CricketStatistics } from "./cricket-statistics";
 import { CricketScoreboard } from "./cricket-scoreboard";
 import { CricketControls } from "./cricket-controls";
 import { CricketCompactControls } from "./cricket-compact-controls";
@@ -20,12 +21,14 @@ function BoardPanel({ bare, children }: { bare: boolean; children: ReactNode }) 
   return bare ? <>{children}</> : <div className="cricket-board-panel">{children}</div>;
 }
 
-export function CricketGameView({ game, state, series, navigation, alternative1v1View, onNextLeg, onRecord: recordEvent, onUndo: undo, onRedo: redo, canRedo, onSetup, onRematch }: {
+export function CricketGameView({ match, game, state, series, navigation, alternative1v1View, onNextLeg, onRotateOrder, onRecord: recordEvent, onUndo: undo, onRedo: redo, canRedo, onSetup, onRematch }: {
+  match: CricketMatch;
   navigation: ReactNode;
   alternative1v1View: boolean;
   game: CricketGame; state: CricketState; onRecord: (event: CricketEvent) => void;
   series: { bestOf: CricketLegFormat; leg: number; wins: number[]; winnerId: string | null };
   onNextLeg: () => void;
+  onRotateOrder: () => void;
   onUndo: () => void; onRedo: () => void; canRedo: boolean; onSetup: () => void; onRematch: () => void;
 }) {
   const heading = useRef<HTMLHeadingElement>(null);
@@ -90,7 +93,7 @@ export function CricketGameView({ game, state, series, navigation, alternative1v
         : t("cricket.turnAnnouncement", { name: active.name, round: state.round, dart: state.turnThrows.length + 1 })}
       {" "}{state.players.map((player, index) => t("cricket.pointsAnnouncement", { number: index + 1, points: player.points })).join(" ")}
     </p>
-    <div className="cricket-game-layout">
+    <div className={`cricket-game-layout${winner ? " cricket-finished-layout" : ""}`}>
       <BoardPanel bare={bareBoard}>
         {multiplayer ? <CricketMultiplayerScoreboard state={state} wins={series.wins} showLegs={series.bestOf > 1} /> : <CricketScoreboard state={state} wins={series.wins} showLegs={series.bestOf > 1}
           inputMode={inputMode} onMark={target => onRecord({ type: "mark", target })}
@@ -104,12 +107,15 @@ export function CricketGameView({ game, state, series, navigation, alternative1v
                 count: last.marks.filter(mark => mark === target).length })).join(", ") || t("cricket.miss")
               : Array.from({ length: 3 }, (_, index) => throwLabel(last.throws[index] ?? { type: "miss" })).join(", "),
           }) : t("cricket.noLastTurn")}</p>
+          {match.legs.length === 1 && game.events.length === 0 && <button className="cricket-button" type="button"
+            onClick={() => { setNotice(""); onRotateOrder(); }}>{t("cricket.rotateOrder")}</button>}
         </div>
       </BoardPanel>
-      {bareBoard && <CricketCompactControls state={state}
+      {winner && <CricketStatistics match={match} winnerId={series.winnerId ?? state.winnerId} />}
+      {!winner && bareBoard && <CricketCompactControls state={state}
         onMark={target => onRecord({ type: "mark", target })}
         onPass={() => onRecord({ type: "end-turn", mode: "marks" })} />}
-      {!compact && <div className="cricket-input-panel">
+      {!winner && !compact && <div className="cricket-input-panel">
       <CricketControls disabled={Boolean(winner)} onRecord={onRecord} turnThrows={state.turnThrows} targets={state.targets}
         closedTargets={state.targets.filter(target => state.players.every(player => isCricketTargetClosed(player, target)))} />
       </div>}

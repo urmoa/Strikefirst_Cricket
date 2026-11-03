@@ -184,6 +184,48 @@ export interface CricketMatch {
   legs: CricketGame[];
 }
 
+export function getCricketMatchStatistics(match: CricketMatch) {
+  const players = match.legs[0].players.map(player => ({
+    id: player.id, name: player.name, marks: 0, darts: 0, points: 0,
+    bestRound: 0, roundsByMarks: [0, 0, 0, 0, 0], legPoints: [] as number[],
+  }));
+  let estimatedDarts = false;
+  for (const game of match.legs) {
+    const state = getCricketState({ ...game, events: [] });
+    let marks = 0;
+    for (const event of game.events) {
+      const player = state.players[state.activePlayer];
+      const totalMarks = () => state.targets.reduce((sum, target) =>
+        sum + player.marks[target] + player.scoringMarks[target], 0);
+      const before = totalMarks();
+      applyEvent(state, game, event);
+      marks += totalMarks() - before;
+      // Automatic handover clears the visit; a winning dart leaves it in place.
+      if (state.turnMode === null || state.winnerId) {
+        const visit = state.turnMode === null ? state.lastTurn! : {
+          mode: state.turnMode, throws: state.turnThrows,
+        };
+        const stats = players.find(candidate => candidate.id === player.id)!;
+        const darts = visit.mode === "marks" || event.type === "end-turn" ? 3 : visit.throws.length;
+        estimatedDarts ||= visit.mode === "marks";
+        stats.marks += marks;
+        stats.darts += darts;
+        stats.bestRound = Math.max(stats.bestRound, marks);
+        stats.roundsByMarks[Math.min(marks, 4)] += 1;
+        marks = 0;
+      }
+    }
+    for (const player of state.players) {
+      const stats = players.find(candidate => candidate.id === player.id)!;
+      stats.points += player.points;
+      stats.legPoints.push(player.points);
+    }
+  }
+  return { estimatedDarts, players: players.map(player => ({
+    ...player, mpr: player.darts ? player.marks * 3 / player.darts : 0,
+  })) };
+}
+
 export function createCricketMatch(players: readonly CricketPlayerSetup[], startingPlayer = 0, bestOf: CricketLegFormat = 1,
   variant: CricketVariant = "standard", targets: readonly CricketTarget[] = CRICKET_TARGETS): CricketMatch {
   if (bestOf !== 1 && bestOf !== 3 && bestOf !== 5) throw new Error(t("cricket.error.format"));

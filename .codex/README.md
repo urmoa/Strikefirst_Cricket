@@ -8,15 +8,18 @@ Kasutaja edastatud projekti andmebaasiskeem on täies mahus failis [schema.prism
 - Kasutajaliides: React 19.
 - ORM: Prisma, klient `prisma-client-js`.
 - Andmebaas: PostgreSQL.
-- Ühendus loetakse keskkonnamuutujast `DATABASE_URL`. Kohalik rakenduse ühendus on Git-ist välistatud `.env` failis; administraatori ühendus on eraldi `.env.migrations` failis.
+- Ühendus loetakse keskkonnamuutujast `DATABASE_URL`. Rakenduse Neoni ühendus on Git-ist välistatud `.env` failis; pilvebaasi omanikuühendus on eraldi `.env.neon.migrations` failis. Varasem kohalik ühendus on `.env.before-neon` failis ja kohaliku administraatori ühendus `.env.migrations` failis.
 - Rollid: `ADMIN`, `MEMBER`.
 - Sündmuse olekud: `UPCOMING`, `COMPLETED`, `CANCELLED`.
 
-## Planeeritud majutus ja andmebaas
+## Majutus ja andmebaas
 
-- Serveri ja rakenduse majutus: [Vercel](https://vercel.com/), kasutusele on plaanitud tasuta pakett.
-- PostgreSQL-andmebaasi majutus: [Neon](https://neon.com/), kasutusele on plaanitud tasuta pakett.
-- Pilvemajutust pole veel seadistatud. Kohalik PostgreSQL 18 andmebaas `strikefirst` ja piiratud rakenduse roll `strikefirst_app` on loodud. Seadistus on [kohaliku andmebaasi juhendis](../docs/local-database.md).
+- Serveri ja rakenduse majutus: [Vercel](https://vercel.com/), projekt `strikefirst-cricket/strikefirst`.
+- PostgreSQL-andmebaasi majutus: [Neon](https://neon.com/). 2026-11-03 ühendati projekt `bitter-term-18836815`, haru `production`, baas `neondb` (AWS Frankfurt). Migratsioonid ja piiratud rakenduse roll `strikefirst_app` on seadistatud; build, API-d ja brauseri profiiliotsing kontrollitud. Seadistus on [Neoni juhendis](../docs/neon-setup.md).
+- Rakendus juurutati Vercelisse 2026-11-03: [strikefirst-zeta.vercel.app](https://strikefirst-zeta.vercel.app). Projekt `strikefirst-cricket/strikefirst`, serverifunktsioonid Frankfurdis (`fra1`), Neoni ühendus piiratud rolliga. Seadistus ja kontrollid on [Verceli juhendis](../docs/vercel-deployment.md). Varasem kohalik PostgreSQL 18 andmebaas `strikefirst` säilib; juhend on [kohaliku andmebaasi juhendis](../docs/local-database.md).
+- GitHubi repositoorium [urmoa/Strikefirst_Cricket](https://github.com/urmoa/Strikefirst_Cricket) ühendati Verceli projektiga 2026-11-03. Verceli GitHubi rakendusel on ligipääs ainult sellele repole. Seos kinnitati Verceli Git-seadetes; eraldi test-push'i ei tehtud. Git-põhine juurutus kasutab push'itud koodi, mitte kohalikke commit'imata muudatusi.
+- Verceli Production-keskkonnas on salajane `DATABASE_URL` rakenduse pooled TLS ühendusega. Omanikuühendust Vercelisse ei lisatud. Preview-baasi ühendus vajab eraldi Neoni haru ja piiratud kasutajat. Migratsioonid käivitatakse enne juurutamist eraldi; Verceli build genereerib ainult Prisma kliendi.
+- Cricketi mänguseis ja Undo/Redo ajalugu säilivad praegu brauserikaardi `sessionStorage`-is. Pilvebaasist kasutatakse profiiliotsingut ja tervisekontrolli; mängude ja tulemuste salvestamine ootab [andmebaasiplaani](../docs/cricket-database-plan.md) teostamist.
 
 ## CSS ja kujundus
 

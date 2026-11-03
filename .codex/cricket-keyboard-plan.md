@@ -47,7 +47,7 @@ Olulised lähtefailid:
 - [cricket-controls.tsx](../src/app/play/cricket/cricket-controls.tsx): noolepõhised nupud ja suletud sihtmärgi keelamine.
 - [cricket-mark-button.tsx](../src/app/play/cricket/cricket-mark-button.tsx): märkide nupud ja 9 märgi piir.
 - [use-cricket-input-mode.ts](../src/app/play/cricket/use-cricket-input-mode.ts): ekraanist ja käigust sõltuv režiim.
-- [cricket.css](../styles/cricket.css): fookus ja mängu paigutus.
+- [cricket.css](../src/app/play/cricket/cricket.css): fookus; [cricket-game.css](../src/app/play/cricket/cricket-game.css): mängu paigutus.
 - [et.ts](../src/lib/locales/et.ts): kasutajale nähtavad tekstid ja ligipääsetavad nimetused.
 
 ## Brauseris kinnitatud leiud

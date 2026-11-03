@@ -1,10 +1,11 @@
-﻿/* Component layout for /play. The shared theme comes from strike-first.css. */
+/* Shared page shells, navigation and descriptive text. Feature styles live beside their components. */
 .play-shell {
   width: min(1120px, calc(100% - 48px));
   min-height: 100dvh;
   margin-inline: auto;
   padding-bottom: 48px;
 }
+
 .play-header {
   display: flex;
   align-items: center;
@@ -13,78 +14,40 @@
   min-height: 96px;
   border-bottom: 1px solid #ffffff1a;
 }
-.play-brand { font-size: 19px; font-weight: 900; letter-spacing: -.7px; }
-.play-brand span { color: #ba0c2f; }
-.play-back { display: inline-flex; align-items: center; gap: 10px; color: #ffffffb3; font-size: 12px; }
-.play-back:hover { color: white; }
-.play-shell a:focus-visible, .play-shell button:focus-visible,
-.local-entry a:focus-visible, .game-dialog button:focus-visible {
+
+.play-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #ffffffb3;
+  font-size: 12px;
+}
+
+.play-back:hover {
+  color: white;
+}
+
+.play-shell a:focus-visible,
+.play-shell button:focus-visible {
   outline: 2px solid #ba0c2f;
   outline-offset: 5px;
 }
-.play-intro { max-width: 650px; padding: 64px 0 40px; }
-.play-eyebrow { color: #d0d0ce; font-size: 10px; font-weight: 800; letter-spacing: 2px; margin-bottom: 14px; }
-.play-intro h1, .local-entry h1 { font-size: clamp(34px, 5vw, 56px); line-height: 1.12; letter-spacing: -2px; margin-bottom: 20px; }
-.play-description { color: #ffffffa6; font-size: 14px; line-height: 1.9; }
-.play-games { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
-.play-card { display: flex; flex-direction: column; padding: 28px; border-radius: 8px; }
-.play-number { color: #ba0c2f; font-size: 64px; font-weight: 900; line-height: 1; letter-spacing: -3px; margin-bottom: 40px; }
-.play-card .play-eyebrow { font-size: 9px; }
-.play-card h2 { font-size: 28px; letter-spacing: -1px; margin-bottom: 12px; }
-.play-card-description { color: #ffffffa6; font-size: 13px; line-height: 1.8; margin-bottom: 28px; }
-.play-guide { display: flex; align-items: center; justify-content: space-between; gap: 12px; border-top: 1px solid #ffffff26; margin-top: auto; padding-top: 18px; text-align: left; font-size: 12px; font-weight: 800; }
-.play-guide:hover { color: #ff8da4; }
-.play-footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid #ffffff1a; color: #ffffff66; font-size: 11px; }
-.game-dialog { position: fixed; inset: 0; margin: auto; width: min(520px, calc(100% - 32px)); max-height: calc(100dvh - 48px); overflow-y: auto; padding: 36px; background: #080808; color: white; border: 1px solid #ba0c2f59; border-radius: 10px; }
-.game-dialog::backdrop { background: #000c; backdrop-filter: blur(5px); }
-.game-dialog h2 { font-size: 30px; line-height: 1.2; margin-bottom: 20px; }
-.game-dialog .play-description { margin-bottom: 28px; }
-.play-button { display: inline-flex; align-items: center; justify-content: center; gap: 20px; border-radius: 5px; padding: 12px 18px; font-size: 12px; font-weight: 800; }
-.local-entry { width: min(650px, calc(100% - 48px)); margin: 80px auto; }
-.local-entry > p:not(.play-eyebrow) { color: #ffffffa6; font-size: 14px; margin-bottom: 28px; }
-.x01-shell {
-  width: min(1280px, calc(100% - 64px));
-  min-height: 100dvh;
-  margin-inline: auto;
-  padding-block: 20px;
+
+.play-description {
+  color: #ffffffa6;
+  font-size: 14px;
+  line-height: 1.9;
 }
-.x01-shell > .play-back { min-height: 28px; font-size: 14px; }
-.x01-title { margin: 12px 0 32px; text-align: center; font-size: clamp(26px, 4vw, 32px); font-weight: 800; letter-spacing: -1px; }
-.x01-types { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; min-width: 0; border: 0; }
-.x01-type {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  min-height: 158px;
-  padding: 24px;
-  border: 1px solid #ba0c2f40;
-  border-radius: 12px;
-  background: #141414;
-  cursor: pointer;
-}
-.x01-type input { position: absolute; width: 1px; height: 1px; opacity: 0; }
-.x01-type:hover { border-color: #ba0c2f; background: #1e1215; }
-.x01-type:has(input:checked) { border-color: #ba0c2f; background: #ba0c2f26; box-shadow: inset 0 0 0 1px #ba0c2f; }
-.x01-type:has(input:focus-visible), .x01-shell a:focus-visible { outline: 2px solid #ba0c2f; outline-offset: 4px; }
-.x01-type-name { font-size: clamp(32px, 4vw, 44px); line-height: 1.2; font-weight: 800; letter-spacing: -1px; }
-.x01-type-subtitle { color: #ffffff99; font-size: 16px; }
-.x01-more { width: 100%; min-height: 70px; margin: 32px 0 12px; border: 2px dashed #ffffff33; border-radius: 12px; color: #ffffff80; font-size: 18px; }
+
 @media (max-width: 760px) {
-  .x01-shell { width: calc(100% - 32px); padding-block: 16px; }
-  .x01-title { margin: 16px 0 24px; }
-  .x01-types { gap: 12px; }
-  .x01-type { min-height: 132px; padding: 20px 12px; }
-  .x01-more { margin-top: 24px; min-height: 60px; font-size: 16px; }
-  .play-shell { width: calc(100% - 36px); }
-  .play-header { min-height: 80px; }
-  .play-brand { font-size: 16px; }
-  .play-back { font-size: 11px; gap: 7px; }
-  .play-intro { padding: 40px 0 30px; }
-  .play-games { grid-template-columns: 1fr; gap: 16px; }
-  .play-card { padding: 25px; }
-  .play-number { font-size: 52px; margin-bottom: 24px; }
-  .game-dialog { padding: 28px; }
+  .play-shell {
+    width: calc(100% - 36px);
+  }
+  .play-header {
+    min-height: 80px;
+  }
+  .play-back {
+    font-size: 11px;
+    gap: 7px;
+  }
 }

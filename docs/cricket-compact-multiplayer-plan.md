@@ -28,7 +28,7 @@ Järgmised paigutusvalikud on selle plaani ettepanekud:
 - [Mitme mängija scoreboard](../src/app/play/cricket/cricket-multiplayer-scoreboard.tsx) kasutab mängijakaarte ja iga kaardi sees `dl`/`dt`/`dd` struktuuri. Kõik sihtmärginumbrid on praegu staatilised.
 - [1v1 scoreboard](../src/app/play/cricket/cricket-scoreboard.tsx) juba kasutab sihtmärginuppe, numbrilist loendurit ja `cricket-mark-ring` raame.
 - [Ajaloo haldus](../src/app/play/cricket/cricket-setup.tsx) juba kasutab `undoCricketMatchInput` funktsiooni ja Redo olekukoopiaid.
-- [Keskne kujundus](../styles/cricket.css) ja [fondiskaala](../styles/cricket-typography.css) peavad jääma stiilide allikaks. Olemasoleva `cricket-table-entry` üheveerulise paigutuse sobivus tuleb üle kontrollida ka mitme mängija klassidega.
+- [Cricketi kujundus](../src/app/play/cricket/) ja [fondiskaala](../src/app/play/cricket/cricket-typography.css) peavad jääma stiilide allikaks. Olemasoleva `cricket-table-entry` üheveerulise paigutuse sobivus tuleb üle kontrollida ka mitme mängija klassidega. Stiilid on alates 03.11.2026 jaotatud vastutuse järgi komponentide kõrval asuvatesse CSS-failidesse.
 
 ## Rakendamise sammud
 

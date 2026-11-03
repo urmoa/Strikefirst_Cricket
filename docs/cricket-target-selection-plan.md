@@ -15,7 +15,7 @@ See on teostusplaan. Rakenduse käitumist selle koostamisel ei muudeta.
 
 [Mänguloogikas](../src/lib/cricket.ts) määrab `CRICKET_TARGETS` korraga tüübi, lubatud sündmused ja võiduks sulgetavad sihtmärgid. Märkide algolek on samuti fikseeritud numbritele 15–20 ja Bull.
 
-[1v1 tabel](../src/app/play/cricket/cricket-scoreboard.tsx), [mitme mängija tabel](../src/app/play/cricket/cricket-multiplayer-scoreboard.tsx), [kompaktne sisestus](../src/app/play/cricket/cricket-compact-controls.tsx) ja [mänguvaade](../src/app/play/cricket/cricket-game.tsx) kasutavad sama fikseeritud loendit. [Visete sisestuses](../src/app/play/cricket/cricket-controls.tsx) on numbrid 20–15 eraldi loendina ning Bulli nupud kuvatakse alati. [Stiilides](../styles/cricket.css) leidub seitsmele sihtmärgile määratud veergude arv.
+[1v1 tabel](../src/app/play/cricket/cricket-scoreboard.tsx), [mitme mängija tabel](../src/app/play/cricket/cricket-multiplayer-scoreboard.tsx), [kompaktne sisestus](../src/app/play/cricket/cricket-compact-controls.tsx) ja [mänguvaade](../src/app/play/cricket/cricket-game.tsx) kasutavad sama fikseeritud loendit. [Visete sisestuses](../src/app/play/cricket/cricket-controls.tsx) on numbrid 20–15 eraldi loendina ning Bulli nupud kuvatakse alati. [Stiilides](../src/app/play/cricket/cricket-scoreboard.css) leidub seitsmele sihtmärgile määratud veergude arv.
 
 ## 1. Seadistus ja valikunupud
 
@@ -54,7 +54,7 @@ Kasuta kõikjal mänguolekust pärit aktiivsete sihtmärkide loendit:
 - [Visete juhtnuppudes](../src/app/play/cricket/cricket-controls.tsx) genereeri valitud numbritele single/double/triple. Kuva Bull 25/50 ainult siis, kui Bull on valitud.
 - [Mänguvaates](../src/app/play/cricket/cricket-game.tsx) kasuta sama loendit suletud sihtmärkide leidmisel ja eelmise käigu märkide kokkuvõttes.
 - Kontrolli [sihtmärkide olekustiile](../src/app/play/cricket/cricket-target-style.ts) ja [märginuppu](../src/app/play/cricket/cricket-mark-button.tsx), et uued numbrid saaksid senised sulgemise, ohu ja sisestuse keelamise olekud.
-- Kohanda [stiilides](../styles/cricket.css) sihtmärkide arvust sõltuvad veerud dünaamiliseks. Kontrolli 1, 7 ja 8 sihtmärki ning Bullita mängu; viimase sihtmärgi või käigu kinnitamise nupu asukoht ei tohi eeldada seitsmerealist tabelit.
+- Kohanda [tabeli](../src/app/play/cricket/cricket-scoreboard.css) ja [sisestuse stiilides](../src/app/play/cricket/cricket-controls.css) sihtmärkide arvust sõltuvad veerud dünaamiliseks. Kontrolli 1, 7 ja 8 sihtmärki ning Bullita mängu; viimase sihtmärgi või käigu kinnitamise nupu asukoht ei tohi eeldada seitsmerealist tabelit.
 - Täienda olemasolevat tõlkelahendust uute siltide ja piirangute tekstidega. Mängukirjeldus peab selgitama valitud sihtmärkidega mängimist, mitte väitma, et alati kasutatakse numbreid 15–20 ja Bulli.
 
 ## 4. Leg’id, kordusmäng ja ajaloo taastamine

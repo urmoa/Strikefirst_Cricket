@@ -1,79 +1,97 @@
-﻿# Strike First — mängude osa
+# Strike First — mängude osa
 
-## Tagasiliikumise kontroll (02.11.2026)
+Next.js 15, React 19, TypeScripti ja Prisma 6 peal töötav mängurakenduse mustand, mis on juurutatud Vercelisse ja ühendatud Neoni PostgreSQL-iga. Arendusala on **`/play`**: Cricket on mängitav, X01 sisaldab praegu mängutüübi valikut. Klubi päris avaleht, sündmused, uudised, liikmelisus ja edetabel jäävad sellest teostusest välja.
 
-Mänguvaliku „Tagasi” link suunas ekslikult samale `/play` lehele; nüüd viib see avalehele `/`. Korduvad päringud marsruutidele `/play/cricket`, `/play`, `/` ja `/play/x01` tagastasid HTTP 200. Kõik 72 testi, tüübikontroll ja eraldi väljundkaustaga tootmisehitus läbisid. Interaktiivne brauserikontroll jäi pooleli: integreeritud brauseri avamine ebaõnnestus. Brauseri Back/Forward, mängust lahkumise kinnitus ning võiduvaatest naasmine vajavad veel brauseris kontrollimist; HTTP päringud neid ei kata.
+See juhend kirjeldab praegust teostust. Varasemate arendusetappide testide arvud ja brauserikontrollid on [kontrollide ajaloos](./docs/verification-history.md); need ei kinnita praeguse versiooni kontrollimist.
 
-## Klaviatuuriga mängimine
+## Avalik rakendus ja juurutamine
 
-Eraldi klaviatuurisisestuse plokk ja selle sisselülitamise valik on eemaldatud. Mängu saab juhtida olemasolevate nuppudega: Tab ja Shift+Tab liiguvad nuppude vahel, Enter ja Space aktiveerivad fookuses nupu.
+- Rakendus: [strikefirst-zeta.vercel.app](https://strikefirst-zeta.vercel.app); [Cricket](https://strikefirst-zeta.vercel.app/play/cricket).
+- GitHub: [urmoa/Strikefirst_Cricket](https://github.com/urmoa/Strikefirst_Cricket), ühendatud Verceli projektiga `strikefirst-cricket/strikefirst`.
+- Verceli serverifunktsioonid töötavad Frankfurdis (`fra1`). Neoni projekt on `bitter-term-18836815`, haru `production`, andmebaas `neondb` (AWS Frankfurt).
+- Production-keskkonna salajane `DATABASE_URL` kasutab piiratud õigustega `strikefirst_app` rolli ja pooled TLS ühendust. Omanikuühendus jääb eraldi migratsioonide jaoks.
 
-Ctrl/Cmd+Z tühistab käigu sisestuse ning Ctrl/Cmd+Shift+Z taastab selle; Windowsis töötab taastamiseks ka Ctrl+Y. Tekstiväljades säilib brauseri teksti Undo/Redo. Klaviatuuri abi asub mängueelsetes täpsemates seadetes. Fookuse parandused jäävad alles.
+Verceli GitHubi rakenduse ligipääs on piiratud selle ühe repositooriumiga.
+GitHubi push'id käivitavad Git-põhiseid juurutusi; kohalikud commit'imata muudatused
+jõuavad sinna alles pärast commit'i ja push'i. Preview-keskkonna andmebaasiühendust
+pole seadistatud; selle jaoks kasuta eraldi Neoni haru ja piiratud kasutajat.
 
-Tabeli märginäit võib ületada kolme: näiteks D20 + T20 annab **5/3** ja 40 punkti, kui mõni vastane on avatud. Kõrilõikajas lisatakse need 40 punkti igale avatud vastasele, kuid lisamärgid kuvatakse viskaja juures ainult ühe korra. Bullil toimib sama arvestus 25 punkti kaupa. Näit kasvab üle kolme ainult tegelikult punkte andnud tabamuste võrra. Sulgemine, võidukontroll, värvid ja keelatud nupud kasutavad endiselt kolme märgi lävendit. Lisamärgid tuletatakse sündmusajaloost ja taastuvad Undo/Redo korral.
+Kohalikust töökaustast saab tootmisversiooni juurutada ka CLI kaudu:
 
-Mängija suletud sihtmärk (3/3) on tulemustabelis õrna rohelise taustaga. Sulgemata sihtmärk on õrna punase taustaga siis, kui vähemalt üks vastane on selle sulgenud ja saab sellelt punkte teha (Kõrilõikajas lisada punkte selle mängija summale). Värvid on iga mängija sihtmärgi juures nii kahe kui mitme mängija vaates, sealhulgas bullil. Märginäidud ja tekstilised selgitused säilivad; Undo/Redo uuendab ka taustavärve.
+```powershell
+npm run build
+npx --yes vercel@latest deploy --prod --yes
+```
 
-Kõigi mängijate suletud sihtmärgi sisestusnupud on keelatud ja tuhmid, sest see sihtmärk on mängust väljas. Sama kehtib mõlemale bullinupule. Kui vähemalt ühel vastasel on sihtmärk avatud, jäävad nupud lubatuks. Undo/Redo uuendab ka nuppude lubatavust. Tulemuseta noole saab endiselt sisestada möödaviskega. See asendab algse alamplaani nõude lubada kõigi suletud sihtmärgi tabamist kasutajaliideses; reeglimootor käsitleb sellist ajalukku jõudnud tabamust endiselt tulemuseta noolena.
-
-Mängijate nimekirja all on „+ Lisa mängija” ja selle all **Vaheta järjekorda**. Järjekorra vahetamine liigutab esimese mängija viimaseks (kahe mängijaga vahetab nimed omavahel). Esimese legi alustaja on alati nimekirja esimene mängija; eraldi „Kes alustab?” valik on eemaldatud. Kordusmäng kasutab sama nimekirja järjekorda, järgmiste legide alustaja liigub endiselt mängijate ringis edasi.
-
-„Täpsemad seaded” sisaldab punktiarvestuse valikut: **Punktimäng** (Scoring, vaikimisi) ja **Kõrilõikaja** (Cutthroat). Cutthroatis lähevad üle kolme märgi teenitud punktid täies mahus igale vastasele, kellel tabatud sihtmärk on sulgemata. Suletud sihtmärgiga vastased punkte ei saa. Võiduks peavad kõik sihtmärgid olema suletud ja punktisumma olema iga vastase omast väiksem või võrdne. Võitu kontrollitakse iga noole järel ka juba kõik sulgenud mängijatel: teise mängija antud punktid võivad nad võidule viia. Valitud mänguviis kuvatakse mänguvaates ning säilib järgmistes legides, seadistusse naasmisel ja kordusmängus. Aluseks on [reeglifaili](./.codex/cricket.txt) 7. jaotis.
-
-Viimane kontroll: **39/39 testi**, `npm run typecheck` ja tootmisehitus läbisid. Brauseris kontrolliti tavalise mängu ja Cutthroati punktijaotust, kahe ja kolme mängija vaateid, Undo/Redo, kolme legi seeriat, võidu tagasivõtmist, kordusmängu ja mänguviisi säilimist. Kontrolliti 375 px mobiilivaadet (sisestusnupud vähemalt 48 px kõrged, horisontaalset kerimist pole), töölauapaigutust ning avalehe, mänguvaliku ja X01 tõlgitud tekste.
-
-## Tõlked
-
-Punktiarvestuse vaikimisi valik sõltub osalejatest: kahe mängijaga **Punktimäng**, kolme või enamaga **Kõrilõikaja**. Käsitsi valitud mänguviis säilib mängijate lisamisel ja eemaldamisel. Cutthroati eestikeelne nimi on **Kõrilõikaja**.
-
-Kõik rakenduse eestikeelsed kasutajaliidese tekstid, metaandmed, ligipääsetavad nimetused, kinnitused, mängijate vaikenimed ja veateated asuvad [eesti keele tõlkefailis](./src/lib/locales/et.ts). Komponendid kasutavad [ühist tõlkefunktsiooni](./src/lib/i18n.ts): näiteks `t("cricket.won", { name: winner.name })`. Laused on terved ning muutujad nimeliste kohatäidetega, et teistes keeltes saaks sõnajärge muuta. TypeScript kontrollib võtmeid ja kohatäidete argumente. Mängureeglite tunnused ja sündmused jäävad keelest sõltumatuks.
-
-Praegu on ainus keel `et`; sama `currentLocale` määrab ka HTML-i `lang` atribuudi. Uue keele jaoks lisa sama võtmekomplektiga sõnastik (`satisfies Dictionary`) ja registreeri see `dictionaries` loendis. `createTranslator(locale)` loob valitud keele tõlkija nii serveri kui kliendi jaoks. Tulevane keelevalik peab andma valitud keele marsruudi või Reacti konteksti kaudu ka komponentidele ja metaandmetele; praegune `t` kasutab ühist vaikekeelt. Keelevahetuse kasutajaliidest ega keele-eelistuse salvestamist veel pole.
-
-Cricketi sisestuse juures on **Undo** ja **Redo**. Undo eemaldab korraga kogu poolelioleva käigu sisestuse; tühja käigu korral taastab eelmise mängija käigu alguse. See taastab ka punktid, märgid, vooru ja legivõidud. Redo taastab täpse tühistatud seisu ning toetab mitut järjestikust taastamist. Uus sisestus, järgmine leg, uus mäng või kordusmäng tühjendab Redo ajaloo. Nupud jäävad kasutatavaks ka võiduvaates. Seis ja taastamise ajalugu säilivad ainult lehe mälus.
-
-Undo/Redo kontroll: **30/30 testi**, `npm run typecheck` ja tootmisehitus läbisid. Brauseris kontrolliti mõlemas mänguvaates tervikkäigu tühistamist, automaatset ja enneaegset käiguvahetust, korduvat Undo/Redo kasutust, uue sisestuse mõju Redole, võidu taastamist ning 375 px mobiilipaigutust. Eraldi kontrollserver: port 3004.
-
-Next.js 15 ja React 19 peal töötav kohalik mustand, mille arendusala on **`/play`**. Klubi avaleht ja ülejäänud veebileht kuuluvad eraldi arendusse.
+Migratsioonid tuleb käivitada eraldi enne juurutamist; Verceli build genereerib
+Prisma kliendi, kuid migratsioone ei rakenda. Kohalikud env-failid ja varukoopiad
+on Gitist ning Verceli üleslaadimisest välistatud.
+Seadistus, kordusjuurutus ja 2026-11-03 kontrollitulemused on
+[Verceli juhendis](./docs/vercel-deployment.md) ning [Neoni juhendis](./docs/neon-setup.md).
+Avalikul rakendusel kontrolliti lehti, andmebaasi tervisekontrolli ja profiili
+otsingust mängu lisamist. GitHubi ühendus kinnitati seadetes; eraldi test-push'i ei tehtud.
 
 ## Käivitamine
 
-Eeldus: Node.js 22.18 või uuem ning npm. Cricketi testid kasutavad Node.js-i sisseehitatud TypeScripti tuge.
+Vaja on Node.js 22.18 või uuemat ning npm-i. Automaattestid kasutavad Node.js-i sisseehitatud TypeScripti tuge.
 
 ```powershell
 npm install
 npm run dev
 ```
 
-Ava [http://localhost:3000/play](http://localhost:3000/play). Server kuulab kohalikul aadressil `127.0.0.1`. Hõivatud pordi korral väljastab arendusserver terminali järgmise vaba pordi. Kindla pordi saad määrata käsuga `npm run dev -- --port 3001`.
+Ava [http://localhost:3000/play](http://localhost:3000/play). Server kuulab aadressil `127.0.0.1`. Hõivatud pordi korral väljastab arendusserver järgmise vaba pordi; kindla pordi saad valida käsuga `npm run dev -- --port 3001`.
 
-Kui samas projektikaustas töötab teine arendusserver, saab kontrollimiseks kasutada eraldi ehituskausta. Määra PowerShellis `$env:STRIKE_FIRST_DIST_DIR = '.next-cricket'` nii ehituse kui ka serveri käivitamise terminalis; seejärel käivita `npm run build` ja `npm start -- --port 3003`. Vaikimisi kasutatakse endiselt tavalist ehituskausta.
+Mängijaprofiilide otsing ja andmebaasi tervisekontroll vajavad seadistatud PostgreSQL-i ühendust. Projekt kasutab nüüd Neoni production-baasi piiratud rakenduse kasutajaga; ühendusfailid, pilvemigratsioonid ja Verceli keskkonnamuutujad on kirjeldatud [Neoni juhendis](./docs/neon-setup.md). Rakenduse ühenduse näidis on failis [.env.example](./.env.example); varasema kohaliku baasi juhis asub [andmebaasidokumentatsioonis](./docs/local-database.md). Cricketit saab mängida ka külalistega, ilma toimiva profiiliotsinguta.
 
-## Lehed ja ulatus
+## Lehed ja API
 
-- `/play` — X01 ja Cricketi valik linkidega mängulehtedele.
-- `/play/cricket` — standardne Cricket kahele või enamale mängijale algusest võiduni: nimed ja alustaja, tulemustabel, S/D/T, bull ja möödavise, automaatne või enneaegne käiguvahetus, eelmise käigu kokkuvõte, tagasivõtmine ning kordusmäng. Uue mängu alustamine ja mängude lehele lahkumine küsivad poolelioleva, vähemalt ühe tegevusega mängu hülgamisel kinnitust.
-- `/play/x01` — X01 mängutüübi valik: 501, 1001, 170, 301, 401 ja DIDO 501. Praegu saab valiku märkida; lisavalikud, edasine seadistamine ja punktiarvestus lisanduvad hiljem.
-- `/` — minimaalne kohalik avalehe kohatäitja lingiga mängudesse. Päris Strike Firsti avalehte siin ei ehitata.
-- `/api/health` — kohaliku serveri tervisekontroll.
+| Marsruut | Praegune funktsioon |
+| --- | --- |
+| `/` | Avalehe kohatäitja lingiga mängudesse. |
+| `/play` | Cricketi ja X01 valik. Logo ja „Tagasi” viivad avalehele `/`. |
+| `/play/cricket` | Cricketi seadistus, mäng, legid, Undo/Redo ja kordusmäng. Tagasinupp viib `/play` lehele. |
+| `/play/x01` | 501, 1001, 170, 301, 401 ja DIDO 501 valik. Punktiarvestust ega mängu alustamist veel pole; tagasilingid viivad `/play` lehele. |
+| `GET /api/players?q=...` | Vähemalt kahe tähemärgiga nimeotsing: kuni 12 profiili ID ja nimega. |
+| `GET /api/health` | Andmebaasiühenduse kontroll: HTTP 200 töötava ühendusega, HTTP 503 ühenduse veaga. |
 
-Kõik „Tagasi” lingid viitavad mängude lehele `/play`. Mängude lehe logo viitab juuraadressile `/`.
+## Cricketi praegune käitumine
 
-Sündmused, uudised, klubitutvustus, liikmeks astumine ja edetabel ei kuulu sellesse projekti. Cricketi seis säilib ainult avatud lehe mälus: värskendamine, sulgemine või lahkumine kustutab selle. Brauseri üldist sulgemist ja värskendamist ei blokeerita. Andmebaasiühendust, kasutajakontosid ja brauserisse salvestamist ei kasutata; salvestamine ja taastamine kuuluvad neljandasse sammu.
+### Seadistamine ja punktid
 
-## Kontrollimine ja tootmisversioon
+- Mängu alustamiseks lisa **2–6 mängijat**, valides otsingust profiili või lisades nimega külalise. Mängijaid saab eemaldada, ümber nimetada ja üles/alla liigutada. Tühi või ainult tühikutest koosnev nimi takistab vormi esitamist.
+- „Vaheta järjekorda” liigutab esimese mängija viimaseks. Esimest legi alustab nimekirja esimene mängija; järgmiste legide alustaja liigub mängijate ringis edasi.
+- Iga mängija sulgemispiir on **1–9 märki**, vaikimisi 3. Vaikimisi sihtmärgid on **20, 19, 18, 17, 16, 15 ja Bull**. Täpsemates seadetes saab valida 1–8 sihtmärki numbrite 10–20 ja Bulli hulgast või juhusliku kaheksa sihtmärgi komplekti.
+- Kahe mängijaga on vaikimisi **Punktimäng**, kolme või enamaga **Kõrilõikaja**. Käsitsi valitud variant säilib mängijate lisamisel ja eemaldamisel.
+- Formaadid 1/3/5 tähendavad vastavalt 1/2/3 legivõitu. Kahe mängijaga kuvatakse „1 leg”, „3 legi (2 võitu)” ja „5 legi (3 võitu)”; rohkemate mängijatega vajalikku legivõitude arvu. Mitme mängija seeria kogupikkus võib ületada formaadi arvu.
+- Täpsemates seadetes saab valida ka kahe mängija vastamisi tulemustabeli; selle väljalülitamisel kasutatakse mängijakaarte. Rohkemate mängijatega kasutatakse alati mängijakaarte.
 
-Mängijate väljade all on **+ Lisa mängija**: see lisab uue nimevälja ja viib fookuse sellele. Lisatud mängija saab eemaldada × nupuga. Vähemalt kaks mängijat jäävad alles; tühjad nimed saavad järjekorranumbri. Alustaja valik arvestab kõiki mängijaid ning eemaldamisel säilitab allesjäänud alustaja või valib eemaldatud alustaja asemel esimese mängija.
+Punktimängus annavad sulgemispiiri ületavad tabamused viskajale punkte, kui vähemalt ühel vastasel on sihtmärk avatud. Kõrilõikajas saab sama punktisumma iga avatud sihtmärgiga vastane. Võiduks tuleb sulgeda kõik valitud sihtmärgid ning Punktimängus koguda vähemalt sama palju punkte kui iga vastane, Kõrilõikajas kõige rohkem sama palju kui iga vastane. Kõrilõikajas võib teise mängija sisestus tuua võidu juba kõik sihtmärgid sulgenud vastasele.
 
-Kahe mängijaga kasutatakse vastamisi tulemustabelit. Kolme või enama mängijaga avaneb eraldi ühine tulemustabel mängijakaartidega, kus igaühel on punktid ning seitse märginäitu. Mõlemas vaates on sama otsene sisestus: näiteks **20 · D20 · T20**, samuti bull ja möödavise. Iga vajutus kasutab ühe noole. Mitme mängija sisestuse juures kuvatakse aktiivse mängija nimi ja number. Mobiilis asub mitme mängija sisestus tabeli ees, töölaual tabeli kõrval.
+Tabelis näidatakse sulgemismärke koos punkte andnud lisamärkidega. Näiteks vaikimisi sulgemispiiri korral annab D20 + T20 näidu **5/3** ja 40 punkti, kui vastane on avatud. Sulgemist ja värve määrab mängija enda sulgemispiir. Suletud sihtmärk on roheka taustaga; vastase suletud, kuid mängija enda avatud sihtmärk punaka taustaga. Kõigi mängijate suletud sihtmärgi sisestusnupud on keelatud.
 
-Kahe mängijaga saab valida **1 leg**, **3 legi (2 võitu)** või **5 legi (3 võitu)**. Rohkemate mängijatega näidatakse samu võidukünniseid kujul **1 legivõit**, **2 legivõitu** või **3 legivõitu**, sest kogu seeria võib eri võitjate korral olla pikem kui 3 või 5 legi. Järgmise legi alustaja liigub kõigi mängijate vahel järjekorras edasi. Formaadivalikute all avaneb jaotis **Täpsemad seaded**, kus saab valida esimese legi alustaja.
+### Sisestamine ja Undo/Redo
 
-Legi lõpus avaneb „Järgmine leg”, kogu seeria lõpus „Kordusmäng”. Tagasivõtmine parandab ka legivõitude arvestust; uue legi alguses saab tagasi võtta eelmise legi võiduviske. Kordusmäng säilitab formaadi, nimed ja algselt valitud alustaja.
+| Sisestusviis | Käitumine |
+| --- | --- |
+| Noolte sisestus | S/D/T, Bull 25/50 ja möödavise. Kolm noolt vahetavad käiku automaatselt; käigu saab lõpetada ka varem. Undo tühistab terve praeguse käigu sisestuse, tühja käigu korral eelmise käigu. |
+| Märkide sisestus | Valitakse ekraanil laiusega alla 760 px **ja** kõrgusega alla 1020 px. Vajutus lisab ühe märgi; käigus saab sisestada kuni 9 märki kuni kolmele erinevale sihtmärgile. Käik lõpetatakse käsitsi. Undo tühistab ühe märgi või käigu üleandmise sündmuse. |
 
-Legiformaatide kontroll: 22/22 testi, tüübikontroll ja tootmisehitus läbisid. Viimases brauserikontrollis läbiti viie legi formaadi 3 : 0 võit, kordusmäng, valikute säilimine ning „Täpsemad seaded” avamine ja sulgemine; kontrolliti 375 px ja 1280 px paigutust. Automaattestid katavad ka 3 : 2 lõpptulemuse ja selle tagasivõtmise. Varasemalt kontrolliti brauseris ühe ja kolme legi formaate.
+Poolelioleva käigu sisestusviis säilib ekraani suuruse muutumisel. Uue tühja käigu režiim valitakse uuesti ekraani järgi. Tagasivõtmine töötab ka võidu järel ja üle legipiiri. Redo taastab tühistatud seisu; uus sisestus, järgmine leg ja kordusmäng tühjendavad Redo ajaloo.
 
-Mitme mängija laienduse kontroll: **27/27 testi**, tüübikontroll ja eraldi ehituskaustaga tootmisehitus läbisid. Brauseris läbiti nelja mängijaga punktiarvestus, käigu- ja legivahetus, seeriavõit, tagasivõtmine üle legipiiri ja kordusmäng. Kontrolliti kahe mängija vaatesse naasmist, alustaja säilimist mängija eemaldamisel ning kaheksa pika võrdse nimega mängija 375 px paigutust. Sisestusnupud on vähemalt 44 × 44 px ning horisontaalset kerimist pole.
+Legivõidu järel saab minna järgmisse legi; kohtumise lõpus alustada sama seadistusega kordusmängu või naasta seadistusse.
+
+Tab ja Shift+Tab liiguvad nuppude vahel, Enter ja Space aktiveerivad fookuses nupu. Mänguvaates toimivad Ctrl/Cmd+Z ja Ctrl/Cmd+Shift+Z; Windowsis ka Ctrl+Y taastamiseks. Tekstiväljades säilib brauseri teksti Undo/Redo. Mängija nimeväljal viib Enter järgmisele väljale; külalise väljal lisab nimega külalise.
+
+### Salvestamine ja lahkumine
+
+Cricket salvestab alustatud kohtumise seadistuse, mänguseisu ning Undo/Redo ajaloo brauserikaardi `sessionStorage`-isse pärast iga muudatust. Seis säilib sama kaardi sessiooni jooksul ka lehe värskendamisel ja mängude loendisse naasmisel. Cricketi uuesti avamisel küsib „Pooleli mäng” hüpikaken, kas jätkata salvestatud mängu või alustada uut.
+
+„Alusta uut” avab seadistuse; vana salvestus asendatakse alles uue mängu tegelikul alustamisel. Hüpikakna sulgemine Escape-klahviga säilitab salvestuse. Kohtumise võit kustutab salvestuse, lõpetatud leg pooleliolevas seerias säilib. Võidu tagasivõtmisel salvestatakse taastatud pooleliolev mäng uuesti. Vigane või ühildumatu salvestus eemaldatakse; keelatud või täis brauserisalvestus ei takista mängimist.
+
+Kaardi sulgemisel sessioon tavaliselt lõpeb, kuid brauseri kaardi/akna taastamine võib taastada ka salvestuse. Eraldi avatud kaardil on oma sessioon; kaardi dubleerimine võib brauseris algse salvestuse kopeerida. Püsivat seadmeteülest salvestamist pole. Andmebaas on kasutusel mängijate otsinguks ja tervisekontrolliks; mänguseisu ega tulemusi sinna veel ei salvestata. Kasutajate autentimist ja keelevalikut pole rakendatud. Andmebaasi salvestamine ja taastamine on [andmebaasiplaani](./docs/cricket-database-plan.md) ettepanekud.
+
+## Kontrollimine ja tootmisehitus
 
 ```powershell
 npm test
@@ -82,37 +100,38 @@ npm run build
 npm start
 ```
 
-`npm start` vajab edukat ehitust. Serveri peatamiseks vajuta selle terminalis `Ctrl+C`.
+`npm test` käivitab [testid](./tests/) Node.js-i testikäivitajaga; `typecheck` kontrollib TypeScripti tüüpe. `npm start` vajab edukat tootmisehitust. Serveri peatamiseks vajuta terminalis Ctrl+C. Kuupäevaga kontrollitulemused ja nende piirangud asuvad [kontrollide ajaloos](./docs/verification-history.md).
 
-## Projekti ülesehitus
+Arendusserver kasutab vaikimisi väljundkausta `.next-dev`; tootmisehitus ja `npm start` kasutavad `.next`. Kausta saab muuta keskkonnamuutujaga `STRIKE_FIRST_DIST_DIR`. Samaaegselt töötavatele protsessidele vali erinevad väljundkaustad ning kasuta tootmisehituse ja selle käivitamise jaoks sama väärtust. Näiteks eraldi kontrollversiooni jaoks:
 
-Arendusserver (`npm run dev`) kasutab eraldi väljundkausta `.next-dev`; tootmisehitus ja `npm start` kasutavad `.next` kausta. Nii ei kirjuta töötava arendusserveri ajal käivitatud ehitus selle JavaScripti faile üle ega põhjusta lehtede vahel liikudes `ChunkLoadError` viga. `STRIKE_FIRST_DIST_DIR` võimaldab kausta käsitsi määrata; samaaegselt töötavatele protsessidele tuleb valida erinevad kaustad.
+```powershell
+$env:STRIKE_FIRST_DIST_DIR = '.next-check'
+npm run build
+npm start -- --port 3003
+```
 
-- [src/app/play/page.tsx](./src/app/play/page.tsx) — mängude leht.
-- [src/app/play/game-selection.tsx](./src/app/play/game-selection.tsx) — mängude kohatäitjad linkidega mängulehtedele.
-- [src/lib/games.ts](./src/lib/games.ts) — loodud mängude loend.
-- [src/lib/cricket.ts](./src/lib/cricket.ts) — Cricketi tabamuste valideerimine, punktiarvestus, käiguvahetus ja kohene võidukontroll. Seis arvutatakse seadistuse ja sündmuste põhjal.
-- [src/app/play/cricket/cricket-setup.tsx](./src/app/play/cricket/cricket-setup.tsx) — seadistus, mälus hoitav mänguajalugu ja lahkumise kinnitus.
-- [src/app/play/cricket/cricket-game.tsx](./src/app/play/cricket/cricket-game.tsx) — mängu- ja võiduvaade; kõrvalkomponendid kuvavad tabelit ja noolesisestust.
-- [src/app/play/cricket/cricket-multiplayer-scoreboard.tsx](./src/app/play/cricket/cricket-multiplayer-scoreboard.tsx) — rohkem kui kahe mängija tulemustabel; sisestuseks kasutatakse ühist [cricket-controls.tsx](./src/app/play/cricket/cricket-controls.tsx) komponenti.
-- [tests/cricket.test.mjs](./tests/cricket.test.mjs) — reeglimootori automaattestid Node.js-i testikäivitajaga; lisasõltuvusi ei vaja.
-- [src/app/page.tsx](./src/app/page.tsx) — kohaliku avalehe kohatäitja; asendatakse põhiprojekti avalehega integreerimisel.
-- [src/app/globals.css](./src/app/globals.css) — mängude komponentide paigutus.
-- [styles/strike-first.css](./styles/strike-first.css) — kasutaja antud musta-punane ühiskujundus.
+## Koodi ja dokumentatsiooni asukohad
 
-Kujundus on imporditud [juurpaigutuses](./src/app/layout.tsx). Montserrat laaditakse kohalikust [fondifailist](./src/app/fonts/Montserrat-Variable.ttf) läbi `next/font/local` seadistuse, kaaludega 100–900. [SIL Open Font License 1.1](./src/app/fonts/OFL.txt) on kaasas. Ehitamiseks ja fondi laadimiseks pole Google'i ühendust vaja.
+| Asukoht | Vastutus |
+| --- | --- |
+| [Rakenduse marsruudid](./src/app/) | Lehed, metaandmed ja API. |
+| [Cricketi komponendid ja hook'id](./src/app/play/cricket/) | Seadistus, mängijavalik, mänguvaade ja kohtumise juhtimine. |
+| [Cricketi reeglimootor](./src/lib/cricket.ts) | Valideerimine, sündmustest arvutatav seis, punktid, käigud, legid ja tagasivõtmine. |
+| [Mängude loend](./src/lib/games.ts) | Mänguvaliku kohalik kataloog. |
+| [Prisma klient](./src/lib/db.ts) | Ainult serveris kasutatav andmebaasiühendus. |
+| [Tõlkefunktsioon](./src/lib/i18n.ts) ja [eesti sõnastik](./src/lib/locales/et.ts) | Tüübitud võtmed ja nimelised kohatäited; praegu ainus keel `et`. |
+| [Üldpaigutus](./src/app/globals.css) ja [ühiskujundus](./styles/strike-first.css) | Üldised lehe- ja teemastiilid. |
+| [Cricketi ühistiil](./src/app/play/cricket/cricket.css) ja [tüpograafia](./src/app/play/cricket/cricket-typography.css) | Cricketi teema, nupud ja fondiskaala. |
+| [Seadistuse stiil](./src/app/play/cricket/cricket-setup.css), [mänguvaade](./src/app/play/cricket/cricket-game.css), [tabelid](./src/app/play/cricket/cricket-scoreboard.css) ja [sisestus](./src/app/play/cricket/cricket-controls.css) | Vastava funktsiooni juures hoitavad Cricketi paigutused. |
+| [Kohalik Montserrat](./src/app/fonts/) | Fondifail ja litsents; laaditakse juurpaigutuses `next/font/local` abil. |
+| [Andmebaasijuhend](./docs/local-database.md) | Kohaliku PostgreSQL-i seadistus, rollid, migratsioonid ja kontrollid. |
+| [Neoni juhend](./docs/neon-setup.md) | Pilvebaasi ühendused, piiratud roll, migratsioonid ja kontrollid. |
+| [Verceli juhend](./docs/vercel-deployment.md) ja [seadistus](./vercel.json) | Avalik aadress, GitHubi ühendus, keskkonnamuutujad ja juurutamine. |
+| [Tööskeem](./prisma/schema.prisma) ja [migratsioonid](./prisma/migrations/) | Rakenduse Prisma mudelid ja migratsiooniajalugu. |
+| [Lähteskeem](./.codex/schema.prisma) ja [tehniline kontekst](./.codex/README.md) | Kasutaja antud algne andmebaasiskeem ja taustinfo. |
+| [Struktuurne ülevaade](./docs/structural-review.md) | 02.11.2026 seisul koostatud tähelepanekud ja parandamisettepanekud. |
+| [Kontrollide ajalugu](./docs/verification-history.md) | Varasemad kontrollitulemused, mitte praeguse käitumise juhend. |
 
-Cricketi kujunduse eeskuju on [Strike Firsti Dart Tennis](https://www.strikefirst.ee/play/dart-tennis): must mängupind, Montserrat, kompaktsed rasked pealkirjad, väikesed suurtähtedes jaotisenimed, hallid ümardatud sisestusnupud ning punased põhitegevused (`#ba0c2f`). Kujundus on piiratud Cricketi vaatega. Pärast kohandamist läbisid tüübikontroll ja tootmisehitus; brauseris kontrolliti 375 px ja 1280 px paigutust, pikki võrdseid nimesid, vähemalt 44 × 44 px nuppe, punktiarvestust, tagasivõtmist, võitu ja kordusmängu.
+Uue keele lisamise alus on sama võtmekomplektiga `Dictionary` ja selle registreerimine tõlkefunktsiooni sõnastikes. Praegune `t` kasutab vaikekeelt; valitava keele edastamine komponentidele ja metaandmetele vajab eraldi teostust.
 
-Cricketi kolmanda sammu kontroll: 18 automaattesti (sh algsed 14), tüübikontroll ja tootmisehitus läbisid. Brauseris kontrolliti punktiarvestust, käiguvahetust ja kokkuvõtet, tagasivõtmist, võitu kõigi kolme noolekohaga, kordusmängu, mõlema kinnituse nõustumist ja tühistamist, klaviatuuri ning 375 px ja töölauavaadet. Pikad võrdsed nimed ei põhjusta horisontaalset kerimist ning mängunupud on vähemalt 44 × 44 px.
-
-## Kohalik andmebaas
-
-Kohalik PostgreSQL-i andmebaas on `strikefirst`. Rakendus kasutab piiratud rolli `strikefirst_app`; administraatori ühendust kasutatakse ainult migratsioonideks. Seadistus ja käsud on [kohaliku andmebaasi juhendis](./docs/local-database.md). Algne [andmebaasi kontekst](./.codex/README.md) ja [Prisma skeem](./.codex/schema.prisma) on säilitatud. Cricketi mänguseis on endiselt lehe mälus; andmebaasiühendust kontrollib `/api/health`.
-
-## Cricketi tahvelvaade ja stiilid
-
-Cricketi kujundus asub eraldi [stiilifailis](./styles/cricket.css), mille impordib [Cricketi leht](./src/app/play/cricket/page.tsx). Faili alguses on m?nguvaatega piiratud CSS-i teemamuutujad (r?huv?rv, abitekst, piirjoon, paneelipind ja puutenupu miinimumk?rgus). Komponendid m??ravad sisu ja tegevused; paigutus, t?pograafia ja ekraanim??tude kohandused on CSS-is.
-
-Alates 761 px laiusest on tulemustabel ja sisestus k?rvuti ning seeria p?is kompaktne. Alates 1000 px laiusest paiknevad S/D/T tabamusread kahes plokis (20/19, 18/17, 16/15), et ka r?htasendis mahuksid bull, m??davise ja k?igu l?petamine ekraanile. Nupud on v?hemalt 48 px k?rgused. Undo/Redo ja m??daviske selgitused avanevad ?Sisestuse abi? alt. Kitsas mobiilivaates s?ilib ?ks veerg; lehte saab loomulikult kerida.
-
+Ülejäänud [arendusplaanid](./docs/) kirjeldavad kavatsusi ja varasemaid lahendusi. Plaani olemasolu ei tähenda, et see on rakendatud; praegust käitumist kirjeldab see README ning täpseid reegleid lähtekood.

@@ -12,9 +12,13 @@
     "db:generate": "prisma generate",
     "db:migrate": "node scripts/migrate-db.cjs",
     "db:check": "node scripts/check-db.cjs",
-    "db:verify": "node scripts/verify-db.cjs"
+    "db:verify": "node scripts/verify-db.cjs",
+    "db:setup:neon": "node scripts/setup-neon.cjs",
+    "db:verify:neon": "node scripts/verify-neon.cjs"
   },
   "dependencies": {
+    "@neon/config": "^1.10.0",
+    "@neon/env": "^1.6.8",
     "@prisma/client": "^6.19.3",
     "dotenv": "^18.0.9",
     "next": "^15.5.0",
